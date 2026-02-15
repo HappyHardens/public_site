@@ -201,3 +201,33 @@
   }
   .footer__links a { color: var(--muted); }
   .footer__links a:hover { color: var(--text); text-decoration: none; }
+
+  .brand__logo {
+    height: 34px;
+    width: auto;
+    display: block;
+  }
+  
+  .hero--center {
+    text-align: center;
+    padding: 80px 0 60px;
+  }
+  
+  .hero__logo {
+    height: 120px;
+    width: auto;
+    margin-bottom: 24px;
+  }
+  
+  .coming-soon {
+    margin: 32px auto 0;
+    padding: 20px;
+    max-width: 720px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: rgba(18, 22, 36, 0.55);
+  }
+  
+  .coming-soon h2 {
+    margin-top: 0;
+  }
