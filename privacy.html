@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Privacy Policy — Happy Hardens, LLC</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <a class="brand" href="/">
+          <span class="brand__mark" aria-hidden="true">🙂</span>
+          <span class="brand__name">Happy Hardens, LLC</span>
+        </a>
+        <nav class="nav" aria-label="Primary">
+          <a href="/support.html">Support</a>
+          <a href="/privacy.html">Privacy</a>
+          <a href="/#games">Games</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="section">
+      <div class="container">
+        <h1>Privacy Policy</h1>
+        <p class="subtitle">
+          This policy describes how Happy Hardens, LLC handles information.
+        </p>
+
+        <article class="card" style="margin-top:16px;">
+          <h2 style="margin-top:0;">Summary</h2>
+          <p class="small">
+            We aim to collect as little personal information as possible. Specific data practices may vary by game and will be disclosed on each game’s page and in-app privacy disclosures.
+          </p>
+
+          <h3>Information We May Collect</h3>
+          <ul class="list">
+            <li><strong>Support communications:</strong> If you email us, we receive your email address and the content of your message.</li>
+            <li><strong>Basic diagnostics:</strong> Apps may collect crash logs and performance data to improve stability (typically via platform tooling).</li>
+          </ul>
+
+          <h3>Information We Do Not Sell</h3>
+          <p class="small">
+            We do not sell your personal information.
+          </p>
+
+          <h3>Third-Party Services</h3>
+          <p class="small">
+            Some apps may use third-party services (for example: analytics, crash reporting, or advertising). When used, those services may process limited device information. Details will be disclosed per app.
+          </p>
+
+          <h3>Contact</h3>
+          <p class="small">
+            Questions? Email <a href="mailto:hello@happyhardens.com">hello@happyhardens.com</a>.
+          </p>
+
+          <p class="small" style="margin-top:14px;">
+            <em>Last updated:</em> <span id="updated"></span>
+          </p>
+        </article>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div>© <span id="year"></span> Happy Hardens, LLC.</div>
+        <div class="footer__links">
+          <a href="/">Home</a>
+          <span aria-hidden="true">·</span>
+          <a href="/support.html">Support</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+      document.getElementById("updated").textContent = new Date().toLocaleDateString();
+    </script>
+  </body>
+</html>

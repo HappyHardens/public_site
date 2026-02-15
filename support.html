@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Support — Happy Hardens, LLC</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <a class="brand" href="/">
+          <span class="brand__mark" aria-hidden="true">🙂</span>
+          <span class="brand__name">Happy Hardens, LLC</span>
+        </a>
+        <nav class="nav" aria-label="Primary">
+          <a href="/support.html">Support</a>
+          <a href="/privacy.html">Privacy</a>
+          <a href="/#games">Games</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="section">
+      <div class="container">
+        <h1>Support</h1>
+        <p class="subtitle">
+          Need help with one of our apps or games? Email us and we’ll get back to you.
+        </p>
+
+        <div class="cards" style="margin-top:16px;">
+          <article class="card">
+            <h3>Email</h3>
+            <p>
+              <a href="mailto:support@happyhardens.com">support@happyhardens.com</a>
+            </p>
+            <p class="small" style="margin-top:10px;">
+              Please include your device type (iPhone/iPad/Android), OS version, and a short description of the issue.
+            </p>
+          </article>
+
+          <article class="card card--muted">
+            <h3>Business</h3>
+            <p>
+              <a href="mailto:hello@happyhardens.com">hello@happyhardens.com</a>
+            </p>
+            <p class="small" style="margin-top:10px;">
+              For partnerships, press, or other inquiries.
+            </p>
+          </article>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div>© <span id="year"></span> Happy Hardens, LLC.</div>
+        <div class="footer__links">
+          <a href="/">Home</a>
+          <span aria-hidden="true">·</span>
+          <a href="/privacy.html">Privacy</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

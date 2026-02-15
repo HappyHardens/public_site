@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="Happy Hardens, LLC — creating simple, joyful mobile games." />
+    <title>Happy Hardens, LLC</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <a class="brand" href="/">
+          <span class="brand__mark" aria-hidden="true">🙂</span>
+          <span class="brand__name">Happy Hardens, LLC</span>
+        </a>
+
+        <nav class="nav" aria-label="Primary">
+          <a href="/support.html">Support</a>
+          <a href="/privacy.html">Privacy</a>
+          <a href="#games">Games</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <h1>Simple, satisfying games.</h1>
+          <p class="subtitle">
+            Welcome to <strong>Happy Hardens, LLC</strong>. We build calm, addictive mobile games you can pick up anytime.
+          </p>
+
+          <div class="cta-row">
+            <a class="btn" href="#games">See games</a>
+            <a class="btn btn--ghost" href="/support.html">Get support</a>
+          </div>
+
+          <div class="note">
+            <p>
+              This site is currently a hub page. Individual game pages are coming soon.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="games" class="section">
+        <div class="container">
+          <h2>Games</h2>
+
+          <div class="cards">
+            <article class="card">
+              <h3>Momentum (working title)</h3>
+              <p>
+                A calm puzzle game where skillful play earns advantages that shape future pieces.
+              </p>
+              <div class="card__meta">
+                <span class="tag">Coming soon</span>
+              </div>
+            </article>
+
+            <article class="card card--muted">
+              <h3>More projects</h3>
+              <p>
+                We’re just getting started. This hub will link out to each game’s website and support page.
+              </p>
+              <div class="card__meta">
+                <span class="tag">In progress</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--alt">
+        <div class="container split">
+          <div>
+            <h2>Contact</h2>
+            <p>
+              For support requests, please use the support page so we can respond quickly.
+            </p>
+            <p class="small">
+              Email: <a href="mailto:support@happyhardens.com">support@happyhardens.com</a>
+              <br />
+              Business: <a href="mailto:hello@happyhardens.com">hello@happyhardens.com</a>
+            </p>
+          </div>
+
+          <div class="panel">
+            <h3>Quick links</h3>
+            <ul class="list">
+              <li><a href="/support.html">Support</a></li>
+              <li><a href="/privacy.html">Privacy Policy</a></li>
+              <li><a href="#games">Games</a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div>© <span id="year"></span> Happy Hardens, LLC. All rights reserved.</div>
+        <div class="footer__links">
+          <a href="/support.html">Support</a>
+          <span aria-hidden="true">·</span>
+          <a href="/privacy.html">Privacy</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
