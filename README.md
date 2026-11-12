@@ -16,16 +16,11 @@ Open http://127.0.0.1:4173. The homepage is `index.html`, with its own `assets/g
 
 Render Static Site configuration is tracked in `render.yaml`. Deploy from this repository's `main` branch, using the build command and `dist` publish directory in that file. The build copies only public HTML and assets; no application server or package installation is needed. The Blueprint requests automatic deploys, but GitHub-triggered deployment has not yet been verified for this public-repository connection. Until verified, use Render's Manual Deploy after pushing to `main`.
 
-Migration status (November 12, 2026): Render is deployed at **https://happy-hardens.onrender.com/**. All 14 published HTML and asset files were verified over HTTPS against the local build. The root domain's authoritative DNS now points only to Render, and a direct HTTPS check at Render passed with normal certificate validation. The `www` DNS update is waiting for GoDaddy's final SMS verification. GitHub Pages and `CNAME` remain in place until both domains have completed the cutover. This website does not host or change CouchDoodle itself.
+Migration completed November 12, 2026. **https://happyhardens.com/** is hosted on Render, with **https://happy-hardens.onrender.com/** as the Render address. All 14 published HTML and asset files match the verified local build. Both domains pass HTTPS validation, and HTTP and `www` redirect to `https://happyhardens.com/`. GitHub Pages is disabled and its `CNAME` file has been removed. This website does not host or change CouchDoodle itself.
 
-The DNS cutover replaces the four GitHub Pages root A records (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`, TTL 600) with Render's `216.24.57.1`, and changes `www` from `happyhardens.github.io` to `happy-hardens.onrender.com`. Nameservers remain `ns37.domaincontrol.com` and `ns38.domaincontrol.com`. Preserve all mail and other unrelated DNS records.
+The root A record points to Render's `216.24.57.1` (TTL 600), and `www` is a CNAME to `happy-hardens.onrender.com` (TTL 1 hour). Nameservers remain `ns37.domaincontrol.com` and `ns38.domaincontrol.com`. Mail and other unrelated DNS records were preserved.
 
-Cutover order:
-
-1. Deploy and verify the Render address, including the homepage, support/privacy pages and assets.
-2. Add `happyhardens.com` to the Render service; Render also configures `www` to redirect to the root domain.
-3. Update only the domain's web DNS records at GoDaddy using Render's displayed targets. Preserve mail, verification and other unrelated records.
-4. Verify both domains and HTTPS on Render, then disable GitHub Pages and remove `CNAME`.
+For future hosting changes, deploy and verify the replacement first, change only the web DNS records, verify certificates and redirects, then retire the previous host.
 
 ## Artwork and fonts
 
