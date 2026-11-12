@@ -16,7 +16,9 @@ Open http://127.0.0.1:4173. The homepage is `index.html`, with its own `assets/g
 
 Render Static Site configuration is tracked in `render.yaml`. Deploy from this repository's `main` branch, using the build command and `dist` publish directory in that file. The build copies only public HTML and assets; no application server or package installation is needed. Successful pushes to `main` deploy automatically once the Render service is connected.
 
-Migration status: Render configuration prepared; live deployment and domain cutover still need verification. GitHub Pages and `CNAME` remain in place until Render serves the custom domain successfully. This website does not host or change CouchDoodle itself.
+Migration status (November 12, 2026): Render is deployed at **https://happy-hardens.onrender.com/**. All 14 published HTML and asset files were verified over HTTPS against the local build. Both custom domains are added to Render; the GoDaddy DNS cutover is waiting for the account owner's SMS identity verification. GitHub Pages and `CNAME` remain in place until Render serves the custom domain successfully. This website does not host or change CouchDoodle itself.
+
+The DNS cutover replaces the four GitHub Pages root A records (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`, TTL 600) with Render's `216.24.57.1`, and changes `www` from `happyhardens.github.io` to `happy-hardens.onrender.com`. Nameservers remain `ns37.domaincontrol.com` and `ns38.domaincontrol.com`. Preserve all mail and other unrelated DNS records.
 
 Cutover order:
 
