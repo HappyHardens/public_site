@@ -14,9 +14,9 @@ Open http://127.0.0.1:4173. The homepage is `index.html`, with its own `assets/g
 
 ## Publishing
 
-Render Static Site configuration is tracked in `render.yaml`. Deploy from this repository's `main` branch, using the build command and `dist` publish directory in that file. The build copies only public HTML and assets; no application server or package installation is needed. Successful pushes to `main` deploy automatically once the Render service is connected.
+Render Static Site configuration is tracked in `render.yaml`. Deploy from this repository's `main` branch, using the build command and `dist` publish directory in that file. The build copies only public HTML and assets; no application server or package installation is needed. The Blueprint requests automatic deploys, but GitHub-triggered deployment has not yet been verified for this public-repository connection. Until verified, use Render's Manual Deploy after pushing to `main`.
 
-Migration status (November 12, 2026): Render is deployed at **https://happy-hardens.onrender.com/**. All 14 published HTML and asset files were verified over HTTPS against the local build. Both custom domains are added to Render; the GoDaddy DNS cutover is waiting for the account owner's SMS identity verification. GitHub Pages and `CNAME` remain in place until Render serves the custom domain successfully. This website does not host or change CouchDoodle itself.
+Migration status (November 12, 2026): Render is deployed at **https://happy-hardens.onrender.com/**. All 14 published HTML and asset files were verified over HTTPS against the local build. The root domain's authoritative DNS now points only to Render, and a direct HTTPS check at Render passed with normal certificate validation. The `www` DNS update is waiting for GoDaddy's final SMS verification. GitHub Pages and `CNAME` remain in place until both domains have completed the cutover. This website does not host or change CouchDoodle itself.
 
 The DNS cutover replaces the four GitHub Pages root A records (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`, TTL 600) with Render's `216.24.57.1`, and changes `www` from `happyhardens.github.io` to `happy-hardens.onrender.com`. Nameservers remain `ns37.domaincontrol.com` and `ns38.domaincontrol.com`. Preserve all mail and other unrelated DNS records.
 
