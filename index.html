@@ -1,108 +1,96 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Happy Hardens, LLC is a mobile app development company creating simple, satisfying mobile experiences." />
-  <title>Happy Hardens, LLC</title>
-  <link rel="stylesheet" href="assets/styles.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173b35">
+  <meta name="description" content="Make a little time for a lot of fun. Discover games from Happy Hardens, starting with CouchDoodle: the drawing game that turns your phones into sketchpads.">
+  <meta property="og:title" content="Happy Hardens Games — Good times start here">
+  <meta property="og:description" content="Your people. Your next game night. Play CouchDoodle, our family drawing game, right in your browser.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://happyhardens.com/">
+  <meta property="og:image" content="https://happyhardens.com/assets/couchdoodle/room.webp">
+  <title>Happy Hardens Games — Good times start here</title>
+  <link rel="canonical" href="https://happyhardens.com/">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preload" href="assets/lilita-one.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="assets/games.css">
 </head>
-
 <body>
-  <header class="header">
-    <div class="container">
-      <a class="brand" href="/">
-        <img src="assets/happyhardens-logo.svg" alt="Happy Hardens Logo" class="brand__logo" />
-        <span class="brand__name">Happy Hardens, LLC</span>
+  <a class="skip-link" href="#main">Skip to games</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="/" aria-label="Happy Hardens Games home">
+        <span class="brand-mark"><img src="assets/happyhardens-logo.svg" width="36" height="36" alt=""></span>
+        <span class="brand-type">Happy Hardens<span>GAMES</span></span>
       </a>
-
-      <nav class="nav" aria-label="Primary">
-        <a href="/support.html">Support</a>
-        <a href="/privacy.html">Privacy</a>
+      <nav class="nav" aria-label="Main navigation">
+        <a class="nav-current" href="#games">Our games</a>
+        <a href="#how-to-play">How to play</a>
+        <a class="support-link" href="support.html">Support <span aria-hidden="true">↗</span></a>
       </nav>
     </div>
   </header>
 
-  <main>
-
-    <!-- HERO -->
-    <section class="hero hero--center">
-      <div class="container hero__content">
-
-        <img src="assets/happyhardens-logo.svg" alt="Happy Hardens Logo" class="hero__logo" />
-
-        <h1>Mobile App Development Studio</h1>
-
-        <p class="subtitle">
-          <strong>Happy Hardens, LLC</strong> is an independent mobile app development company
-          focused on building clean, engaging, and thoughtfully designed mobile experiences.
-        </p>
-
-        <div class="coming-soon">
-          <h2>Website Coming Soon</h2>
-          <p>
-            We are currently preparing dedicated pages for each of our upcoming mobile apps and games.
-            Please check back soon for full product details.
-          </p>
-        </div>
-
-        <div class="cta-row">
-          <a class="btn" href="/support.html">Support</a>
-          <a class="btn btn--ghost" href="/privacy.html">Privacy Policy</a>
-        </div>
-
+  <main id="main" class="wrap">
+    <section class="welcome" aria-labelledby="welcome-title">
+      <div class="welcome-copy">
+        <p class="eyebrow"><span class="tiny-spark" aria-hidden="true">✳</span> GOOD TIMES START HERE</p>
+        <h1 id="welcome-title">Your people.<br>Your next <span class="underline">game night.</span></h1>
+      </div>
+      <div class="welcome-note">
+        <span class="note-star" aria-hidden="true">✳</span>
+        <p>A little friendly competition.<br>A whole lot of laughing together.</p>
+        <span class="handwritten">Everybody’s invited.</span>
       </div>
     </section>
 
-    <!-- ABOUT -->
-    <section class="section section--alt">
-      <div class="container split">
-
-        <div>
-          <h2>About Happy Hardens</h2>
-          <p class="small">
-            Founded to create high-quality mobile applications and games,
-            Happy Hardens, LLC develops thoughtfully crafted software designed
-            for clarity, usability, and long-term enjoyment.
-          </p>
-          <p class="small">
-            Our portfolio will soon include multiple mobile titles, each with
-            dedicated product pages, support documentation, and privacy details.
-          </p>
-        </div>
-
-        <div class="panel">
-          <h3>Company Information</h3>
-          <ul class="list">
-            <li><strong>Company:</strong> Happy Hardens, LLC</li>
-            <li><strong>Industry:</strong> Mobile Application Development</li>
-            <li><strong>Email:</strong> 
-              <a href="mailto:development@happyhardens.com">development@happyhardens.com</a>
-            </li>
-            <li><strong>Support:</strong> 
-              <a href="mailto:support@happyhardens.com">support@happyhardens.com</a>
-            </li>
+    <section class="library" id="games" aria-labelledby="library-title">
+      <div class="section-heading">
+        <h2 id="library-title">The game shelf <span class="game-count" aria-label="1 game">01</span></h2>
+        <span class="shelf-note">Pick a game. Make a night of it.</span>
+      </div>
+      <article class="game-card" aria-labelledby="couchdoodle-title">
+        <div class="game-copy">
+          <div class="game-kicker"><span class="available"><span aria-hidden="true"></span> READY TO PLAY</span><span>DRAWING · PARTY</span></div>
+          <h3 id="couchdoodle-title">CouchDoodle<span class="title-dot" aria-hidden="true">.</span></h3>
+          <p class="game-tagline">Big laughs. Questionable art.</p>
+          <p class="game-description">Turn your phone into a sketchpad, team up, and see who can guess what on earth you’re drawing.</p>
+          <ul class="game-details" aria-label="Game features">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M10 18h4"/></svg> Phones as sketchpads</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 22h8m-4-4v4"/></svg> Optional TV display</li>
           </ul>
+          <a class="play-button" href="https://couchdoodle.com/">Play CouchDoodle <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+          <p class="play-note">In your browser <span aria-hidden="true">·</span> No download <span aria-hidden="true">·</span> Opens couchdoodle.com</p>
         </div>
-
-      </div>
+        <a class="game-art" href="https://couchdoodle.com/" aria-label="Play CouchDoodle at couchdoodle.com">
+          <img class="room-art" src="assets/couchdoodle/room.webp" width="1672" height="941" alt="">
+          <div class="art-grain" aria-hidden="true"></div>
+          <img class="game-wordmark" src="assets/couchdoodle/wordmark.webp" width="2148" height="732" alt="" fetchpriority="high">
+          <img class="table-art" src="assets/couchdoodle/game-night.png" width="1536" height="1024" alt="A colorful category wheel, trophy, and a doodle of a dog on a game-night table.">
+          <span class="art-sticker" aria-hidden="true">Art skills<br><strong>optional.</strong><svg viewBox="0 0 72 28"><path d="M5 16q28 12 62-10"/></svg></span>
+          <span class="art-caption">A HAPPY HARDENS ORIGINAL</span>
+        </a>
+      </article>
+      <div class="shelf-footer"><span class="shelf-footer-icon" aria-hidden="true">✦</span><p>Our first game. Your next favorite tradition.</p><span class="shelf-footer-line" aria-hidden="true"></span><span class="handwritten">More good times ahead.</span></div>
     </section>
 
+    <section class="how-section" id="how-to-play" aria-labelledby="how-title">
+      <div class="how-intro"><p class="eyebrow">LESS SETUP. MORE PLAY.</p><h2 id="how-title">From “what should we do?”<br>to “one more round.”</h2></div>
+      <ol class="steps">
+        <li><span class="step-number">01</span><div><h3>Open CouchDoodle</h3><p>Hit Play to head over to couchdoodle.com. It runs right in your browser.</p></div></li>
+        <li><span class="step-number">02</span><div><h3>Gather your crew</h3><p>Create a room, grab your phones, and join using the room code or QR code.</p></div></li>
+        <li><span class="step-number">03</span><div><h3>Draw. Guess. Repeat.</h3><p>Pick your teams and let the doodling begin. The best memories rarely look like masterpieces.</p></div></li>
+      </ol>
+    </section>
   </main>
 
-  <footer class="footer">
-    <div class="container footer__inner">
-      <div>© <span id="year"></span> Happy Hardens, LLC. All rights reserved.</div>
-      <div class="footer__links">
-        <a href="/support.html">Support</a>
-        <span aria-hidden="true">·</span>
-        <a href="/privacy.html">Privacy</a>
-      </div>
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-signoff"><span class="footer-spark" aria-hidden="true">✳</span><div><strong>Made for a good time.</strong><span>© <span id="year">2026</span> Happy Hardens, LLC</span></div></div>
+      <nav class="footer-links" aria-label="Footer navigation"><a href="support.html">Support</a><a href="privacy.html">Privacy</a><a href="mailto:development@happyhardens.com">Say hello <span aria-hidden="true">↗</span></a></nav>
     </div>
   </footer>
-
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
