@@ -14,7 +14,7 @@ Open http://127.0.0.1:4173. The homepage is `index.html`, with its own `assets/g
 
 ## Publishing
 
-Render Static Site configuration is tracked in `render.yaml`. Deploy from this repository's `main` branch, using the build command and `dist` publish directory in that file. The build copies only public HTML and assets; no application server or package installation is needed. The Blueprint requests automatic deploys, but GitHub-triggered deployment has not yet been verified for this public-repository connection. Until verified, use Render's Manual Deploy after pushing to `main`.
+Render Static Site configuration is tracked in `render.yaml`. Deploy from this repository's `main` branch, using the build command and `dist` publish directory in that file. The build copies only public HTML and assets; no application server or package installation is needed. Automatic deployment from `main` was verified on November 12, 2026 when commit `44aa7e6` published Trivia successfully. Render’s Manual Deploy remains available when needed.
 
 Migration completed November 12, 2026. **https://happyhardens.com/** is hosted on Render, with **https://happy-hardens.onrender.com/** as the Render address. All 14 published HTML and asset files match the verified local build. Both domains pass HTTPS validation, and HTTP and `www` redirect to `https://happyhardens.com/`. GitHub Pages is disabled and its `CNAME` file has been removed. This website does not host or change CouchDoodle itself.
 
