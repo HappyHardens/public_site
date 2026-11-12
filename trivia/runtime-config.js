@@ -1,3 +1,2 @@
-// Set backendOrigin to the verified Render multiplayer service before publishing.
-// Only public routing belongs here; never put credentials or question data in this file.
-window.HH_TRIVIA_CONFIG = {publicUrl:"https://happyhardens.com/trivia/"};
+// Public routing only. Never place credentials or question data here.
+window.HH_TRIVIA_CONFIG = {backendOrigin:"https://happy-hardens-trivia.onrender.com", publicUrl:"https://happyhardens.com/trivia/"};
