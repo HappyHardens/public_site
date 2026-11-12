@@ -1,6 +1,6 @@
 # Happy Hardens public website
 
-The public game library at **https://happyhardens.com/**. The library currently features CouchDoodle; its Play links navigate directly to **https://couchdoodle.com/**.
+The public game library at **https://happyhardens.com/**. The library features CouchDoodle (hosted at **https://couchdoodle.com/**) and Happy Hardens Trivia (served directly at **https://happyhardens.com/trivia/**).
 
 ## Edit and preview
 
@@ -28,4 +28,10 @@ CouchDoodle artwork is reused from Happy Hardens' existing game. The locally hos
 
 ## Library additions
 
-Add only playable games. Use a real destination URL, an accessible title and artwork description, and accurate game requirements. The current page intentionally has one game and no inactive placeholder tiles.
+Add only playable games. Use a real destination URL, an accessible title and artwork description, and accurate game requirements. The current page has two playable games and no inactive placeholder tiles.
+
+## Trivia deployment
+
+`trivia/` contains only the public UI copied from `HappyHardens/games`, branch `codex/trivia-v1`, directory `games/trivia/public/`. The private question bank and server stay in that repository. The browser remains on HappyHardens.com while its runtime configuration directs API and WebSocket requests to the separate Render multiplayer service. Configure that service with `PUBLIC_URL=https://happyhardens.com/trivia/` so links and QR codes return to this site.
+
+When updating Trivia, copy its public assets again, then preserve the production `trivia/runtime-config.js`. Deploy the compatible backend before publishing the updated static site.

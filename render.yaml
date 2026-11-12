@@ -6,7 +6,7 @@ services:
     repo: https://github.com/HappyHardens/public_site
     branch: main
     autoDeployTrigger: commit
-    buildCommand: mkdir -p dist && cp index.html privacy.html support.html dist/ && cp -R assets dist/
+    buildCommand: mkdir -p dist && cp index.html privacy.html support.html dist/ && cp -R assets trivia dist/
     staticPublishPath: ./dist
     envVars:
       - key: SKIP_INSTALL_DEPS
