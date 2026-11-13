@@ -102,7 +102,7 @@ function updateLobby(){
   document.getElementById('room-capacity').hidden=state.players.length<state.rules.maxPlayers;
   document.querySelectorAll('.remove-player').forEach(function(el){el.onclick=function(){send({type:'remove',playerId:el.dataset.id});};});
   var start=document.getElementById('start');start.hidden=!state.canControl;start.disabled=!state.players.length||state.players.some(function(p){return !p.ready||!p.connected;});
-  document.getElementById('lobby-help').textContent=state.canControl?'Everyone ready? Let’s play!':state.role==='viewer'?'Watching live. Answer on your phone.':'You’re in! Your host will start.';
+  document.getElementById('lobby-help').textContent=state.canControl?'Everyone here? Let’s play!':state.role==='viewer'?'Watching live. Answer on your phone.':'You’re in! Your host will start.';
 }
 function questionMeta(){
   return '<div class="round-meta"><span class="round-category">THE BIBLE</span><span class="round-number">QUESTION '+state.questionInRound+' OF '+state.settings.questionsPerRound+' · ROUND '+state.matchRound+' / 3</span></div>';
