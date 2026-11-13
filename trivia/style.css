@@ -362,3 +362,82 @@ body.learning .topbar{display:none}.learning-screen{flex:1;min-height:0;display:
   #app.large-room #players{--lobby-name-size:27px;--lobby-status-size:17px}
   #app.large-room #lobby-help{font-size:22px;margin:8px 0 10px}
 }
+
+/* Explicit TV board spacing survives older Samsung browsers without gap support. */
+@media(min-width:701px){
+  #question-layout{gap:0;grid-gap:0}
+  #question-layout>aside{margin-left:24px;gap:0}
+  #question-layout .game-main{gap:0}
+  #question-layout .round-top{gap:0;padding-bottom:14px}
+  #question-layout .round-meta{gap:0;padding-right:16px}
+  #question-layout .round-category{margin-right:22px}
+  #question-layout .round-number{margin-top:6px}
+  #question-layout .live-stats{gap:0;flex:none;margin-left:12px}
+  #question-layout .timer{width:94px;min-width:94px;height:94px;font-size:54px;border-width:5px;margin-left:22px}
+  #question-layout .points-value{font-size:42px}
+  #question-layout .time-track{margin-bottom:14px}
+  #question-layout .question{margin-bottom:18px}
+  #question-layout .options{gap:0;grid-gap:0;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr))}
+  #question-layout .answer{margin:8px;padding:18px;gap:0}
+  #question-layout .answer .letter{margin-right:20px}
+  #question-layout .answer>span:last-child{min-width:0}
+  #question-layout .selection-status{margin-top:12px}
+  #question-layout .leaderboard{gap:0}
+  #question-layout .leaderboard .side-heading{margin-bottom:14px;line-height:1.2;font-size:21px}
+  #question-layout #scores .player-row{gap:0}
+  #question-layout #scores .player-name{margin-left:10px;white-space:nowrap;overflow-wrap:normal}
+  #question-layout #scores .score{margin-left:12px;flex:none}
+  #app:not(.medium-room) #scores .player-name{font-size:32px}
+  #app:not(.medium-room) #scores .score{font-size:36px}
+  #app:not(.medium-room) #scores .avatar{width:34px;height:34px;font-size:22px}
+  #app.medium-room:not(.large-room) #scores .player-name{font-size:24px}
+  #app.medium-room:not(.large-room) #scores .score{font-size:28px}
+  #question-layout .board-code{gap:0;margin-top:16px}
+  #question-layout .board-join-details{gap:0;margin-left:14px}
+  #question-layout .board-join-details>span,#question-layout .board-join-details>strong{margin-bottom:4px}
+}
+@media(min-width:1700px) and (min-height:1000px){
+  #question-layout>aside{margin-left:32px}
+  #question-layout .round-top{padding-bottom:20px}
+  #question-layout .timer{width:116px;min-width:116px;height:116px;font-size:68px;margin-left:30px}
+  #question-layout .points-value{font-size:52px}
+  #question-layout .time-track{margin-bottom:20px}
+  #question-layout .question{margin-bottom:24px}
+  #question-layout .answer{margin:12px;padding:25px}
+  #question-layout .answer .letter{margin-right:28px}
+  #question-layout .leaderboard .side-heading{font-size:28px;margin-bottom:20px}
+  #app:not(.medium-room) #scores .player-name{font-size:42px}
+  #app:not(.medium-room) #scores .score{font-size:46px}
+  #app:not(.medium-room) #scores .avatar{width:44px;height:44px;font-size:28px}
+}
+@media(max-height:750px) and (min-width:701px){
+  #question-layout .round-top{padding-bottom:10px}
+  #question-layout .timer{width:82px;min-width:82px;height:82px;font-size:48px;margin-left:18px}
+  #question-layout .points-value{font-size:36px}
+  #question-layout .time-track{margin-bottom:10px}
+  #question-layout .question{font-size:32px;margin-bottom:14px}
+  #question-layout .answer{padding:12px;margin:7px;font-size:23px}
+  #question-layout .answer .letter{margin-right:18px}
+  #question-layout .selection-status{font-size:18px;margin-top:9px}
+  #question-layout .leaderboard .side-heading{font-size:19px;margin-bottom:10px}
+  #app:not(.medium-room) #scores .player-name{font-size:30px}
+  #app:not(.medium-room) #scores .score{font-size:34px}
+}
+@media(max-height:500px) and (min-width:701px){
+  #question-layout .timer{width:58px;min-width:58px;height:58px;font-size:34px;margin-left:12px}
+  #question-layout .points-value{font-size:29px}
+  #question-layout .round-top{padding-bottom:7px}
+  #question-layout .question{font-size:24px;margin-bottom:8px}
+  #question-layout .time-track{margin-bottom:7px}
+  #question-layout .answer{margin:5px;padding:7px;font-size:17px}
+  #question-layout .answer .letter{margin-right:12px}
+  #question-layout .selection-status{font-size:13px;margin-top:6px}
+  #question-layout .leaderboard .side-heading{font-size:15px;margin-bottom:6px}
+  #app:not(.medium-room) #scores .player-name{font-size:23px}
+  #app:not(.medium-room) #scores .score{font-size:26px}
+  #question-layout .board-code{margin-top:10px}
+}
+@media(min-width:701px){
+  #app.large-room #scores .player-row{padding:0}
+  #app.large-room #scores .player-name{line-height:1.1}
+}
