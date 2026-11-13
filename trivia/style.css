@@ -500,3 +500,27 @@ body.learning .topbar{display:none}.learning-screen{flex:1;min-height:0;display:
   .lesson-score-list strong,#app:not(.medium-room) .lesson-score-list strong{font-size:25px;margin-left:8px}
   .lesson-footer{margin-top:9px}
 }
+
+/* A choice is neutral until the server reveals correctness. */
+.answer.selected{position:relative;background:#e6eefb;border-color:#385f91;box-shadow:0 0 0 2px #385f91,0 4px 0 #12383d20}
+.answer.selected .letter:after{display:none}
+.answer.selected:after{content:'Selected';position:absolute;right:14px;top:-10px;padding:3px 10px;border-radius:12px;background:#385f91;color:white;font:bold 12px/1.2 Arial;letter-spacing:.2px}
+.answer.removed,.answer.final-fade{opacity:.62;pointer-events:none}
+.answer.correct{opacity:1;background:#dcefd3;border-color:var(--teal);box-shadow:0 0 0 2px var(--teal),0 4px 0 #12383d20}
+@media(max-width:700px){
+  .round-top{padding-top:5px;padding-bottom:7px}
+  .live-stats{gap:0;margin-left:10px;flex:none}
+  .timer{margin-left:16px;min-width:50px;width:50px;height:50px;font-size:29px}
+  .available-points{min-width:65px}
+}
+.answer-celebration{position:fixed;inset:0;z-index:12;pointer-events:none}
+.celebration-message{position:absolute;top:22%;left:50%;transform:translateX(-50%);width:270px;max-width:85vw;padding:15px 20px;border:3px solid var(--teal);border-radius:20px;background:var(--ink);color:var(--white);text-align:center;box-shadow:0 7px 0 #12383d25}
+.celebration-message strong{display:block;font:36px/1.1 Lilita,Arial;color:var(--gold)}
+.celebration-message span{display:block;margin-top:6px;font-size:21px;font-weight:bold}
+.confetti{position:absolute;inset:0;overflow:hidden}
+.confetti-bit{position:absolute;top:-24px;left:var(--x);width:10px;height:18px;border-radius:2px;background:var(--gold);animation:correct-confetti 1.45s var(--delay) ease-in both}
+.confetti-bit:nth-child(3n){background:var(--orange)}
+.confetti-bit:nth-child(3n+1){background:#7bc9b8}
+@keyframes correct-confetti{0%{opacity:0;transform:translateY(0) rotate(0)}10%{opacity:1}100%{opacity:0;transform:translateY(85vh) rotate(var(--spin))}}
+.departing-question .confetti-bit{animation:none;opacity:0}
+@media(prefers-reduced-motion:reduce){.confetti{display:none}}

@@ -127,11 +127,11 @@ function updateRound(){
   if(priorSelection&&!selected&&!reveal){selectionCleared=true;connection.textContent='Choose again';}
   if(selected)selectionCleared=false;priorSelection=selected;
   document.getElementById('offline').innerHTML=active?'':'<div class="offline-banner">Connection interrupted. The match continues. Reconnecting your device…</div>';
-  state.round.options.forEach(function(o){var b=document.getElementById('option-'+o.id);b.disabled=!active||!state.self||state.phase!=='question'||o.removed;b.classList.toggle('removed',o.removed);b.classList.toggle('selected',!!selected&&selected.optionId===o.id);b.classList.toggle('correct',reveal&&state.round.answerId===o.id);b.classList.toggle('wrong-selection',reveal&&!!selected&&selected.optionId===o.id&&state.round.answerId!==o.id);b.setAttribute('aria-pressed',selected&&selected.optionId===o.id?'true':'false');b.setAttribute('aria-label',letters[state.round.options.indexOf(o)]+'. '+o.label+(o.removed?' — removed':''));});
+  state.round.options.forEach(function(o){var b=document.getElementById('option-'+o.id);b.disabled=!active||!state.self||state.phase!=='question'||o.removed;b.classList.toggle('removed',o.removed);b.classList.toggle('selected',!!selected&&selected.optionId===o.id);b.classList.toggle('correct',reveal&&state.round.answerId===o.id);b.classList.toggle('wrong-selection',reveal&&!!selected&&selected.optionId===o.id&&state.round.answerId!==o.id);b.setAttribute('aria-pressed',selected&&selected.optionId===o.id?'true':'false');b.setAttribute('aria-label',letters[state.round.options.indexOf(o)]+'. '+o.label+(o.removed?' — eliminated':''));});
   setMarkup('scores',playerRows(true));
   var status=document.getElementById('selection-status');
   if(!state.self){status.textContent='Choose on your device. You can change your answer until time runs out.';}
-  else if(selectionCleared){status.textContent='Your choice faded out. Choose another answer!';}
+  else if(selectionCleared){status.textContent='Your choice was eliminated. Choose another answer!';}
   else if(selected){var index=state.round.options.findIndex(function(o){return o.id===selected.optionId;});status.textContent=letters[index]+' selected · '+selected.potentialPoints+' points if correct. You can change it until the timer ends.';}
   else status.textContent='Make your pick. You can change it until the timer ends.';
   updateClock();
@@ -156,9 +156,16 @@ function updateClock(){
 }
 function buildReveal(){
   if(!document.querySelector('.options')){buildLearning();return;}
-  state.round.options.forEach(function(o){var b=document.getElementById('option-'+o.id);b.disabled=true;b.classList.remove('selected');if(o.id!==state.round.answerId){b.classList.add('removed');if(!o.removed)b.classList.add('final-fade');}});
+  state.round.options.forEach(function(o){var b=document.getElementById('option-'+o.id);b.disabled=true;b.classList.remove('selected');if(o.id===state.round.answerId){b.classList.remove('removed','final-fade');b.classList.add('correct');}else{b.classList.add('removed');if(!o.removed)b.classList.add('final-fade');}});
   var points=document.getElementById('points-available');if(points)points.textContent='0';
-  document.getElementById('timer').textContent='0';document.getElementById('time-fill').style.transform='scaleX(0)';document.getElementById('selection-status').textContent='Time’s up…';
+  document.getElementById('timer').textContent='0';document.getElementById('time-fill').style.transform='scaleX(0)';document.getElementById('selection-status').textContent='Time’s up — the correct answer is highlighted.';
+  var me=state.self&&state.players.find(function(p){return p.id===state.self.id;});
+  if(me&&me.result&&me.result.correct){
+    document.getElementById('selection-status').textContent='You got it! +'+me.result.points+' points.';
+    var celebration=document.createElement('div');celebration.className='answer-celebration';celebration.setAttribute('role','status');
+    celebration.innerHTML='<div class="celebration-message"><strong>You got it!</strong><span>+'+me.result.points+' points</span></div><div class="confetti" aria-hidden="true">'+Array.from({length:18},function(_,i){return '<i class="confetti-bit" style="--x:'+(5+(i*37)%90)+'%;--delay:'+(i%5)*.06+'s;--spin:'+(180+i*41)+'deg"></i>';}).join('')+'</div>';
+    document.querySelector('.game-main').appendChild(celebration);
+  }
 }
 var lessonContentKey='';
 function fadingQuestionScreen(answerId){
