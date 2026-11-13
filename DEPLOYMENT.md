@@ -15,3 +15,7 @@ Deployment verification: all 29 backend automated checks passed, including 20 si
 A separate production test room accepted twenty concurrent players and acknowledged all twenty answer submissions in 486 ms from the test connection. This is a bounded smoke test, not a guarantee for twenty physical devices or all network conditions. Physical phone/TV testing remains for real game nights.
 
 Existing static site: happy-hardens, srv-dbqv5o61egvs73e001r0. DNS and CouchDoodle hosting are unchanged.
+
+## TV connection compatibility update
+
+November 12, 2026: replaced the startup health check's AbortController requirement with XMLHttpRequest and its native timeout. A regression harness reproduced the old Host failure when AbortController was absent; the new startup, retry, cancellation, and stalled-connection checks pass (32 total tests). Connection progress and failures now appear in a prominent banner with Cancel/Dismiss, and the home controls recover after errors. Asset URLs are versioned for this update so reloading the TV page requests the new JavaScript. This reproduces the missing-feature failure, but the user's physical Samsung TV still needs confirmation.

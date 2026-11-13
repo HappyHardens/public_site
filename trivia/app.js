@@ -1,7 +1,7 @@
 'use strict';
 var app=document.getElementById('app'), connection=document.getElementById('connection');
 var state=null, ws=null, session=null, config={publicUrl:null,categories:[{id:'bible',name:'The Bible'}]}, viewKey='', retry=0, retryTimer=null, clockOffset=0, seq=0, priorSelection=null, selectionCleared=false, toastTimer=null, pendingAction=null, manualClose=false;
-var runtime=window.HH_TRIVIA_CONFIG||{}, backendOrigin=runtime.backendOrigin||location.origin, pageHome=runtime.publicUrl||new URL('.',location.href).href, warming=false, connectGeneration=0;
+var runtime=window.HH_TRIVIA_CONFIG||{}, backendOrigin=runtime.backendOrigin||location.origin, pageHome=runtime.publicUrl||new URL('.',location.href).href, warming=false, connectGeneration=0, healthRequest=null, socketTimer=null;
 var letters=['A','B','C','D'];
 function apiPath(path){return backendOrigin+path;}
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
@@ -10,34 +10,50 @@ function saveSession(){try{if(session)sessionStorage.setItem('hh-trivia',JSON.st
 function toast(message){var el=document.getElementById('toast');el.textContent=message;el.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(function(){el.classList.remove('visible');},4500);}
 function send(m){if(!ws||ws.readyState!==1){toast('Reconnecting. Wait for the connection before choosing.');return false;}ws.send(JSON.stringify(m));return true;}
 var errors={ROOM_NOT_FOUND:'That room is no longer available. Check the code or start a new room.',ROOM_FULL:'This room already has twenty players.',NAME_TAKEN:'That name is taken. Try a different name.',INVALID_NAME:'Enter a name to join.',LESSON_RUNNING:'Take a moment to read the lesson. Continue will be ready when the countdown ends.',NOT_REVEALING:'The next question is already on its way.',NOT_READY:'Every player must be connected and ready.',OPTION_REMOVED:'That answer is fading out. Choose another one.',NOT_ANSWERING:'The answer window is closed.',STALE_QUESTION:'A new question has started.',STALE_SUBMISSION:'Your newer answer has already been received.',INVALID_TOKEN:'This reconnect link has expired. Rejoin from the home screen.',MATCH_STARTED:'The match has started. You can still watch.',ROOM_EXPIRED:'This room has expired. Start a new room.',NOT_HOST:'Only the host or room captain can do that.',PLAYER_CONNECTED:'Only a disconnected player can be removed in the lobby.',SERVER_FULL:'The server is full. Please try again shortly.'};
+function connectionNotice(message,busy){
+  var notice=document.getElementById('connect-notice');notice.hidden=!message;
+  document.getElementById('connect-message').textContent=message||'';
+  document.getElementById('cancel-connect').textContent=busy?'Cancel':'Dismiss';
+  ['host','solo','watch'].forEach(function(id){var button=document.getElementById(id);if(button)button.disabled=busy;});
+  var join=document.getElementById('join');if(join)Array.prototype.forEach.call(join.querySelectorAll('button'),function(button){button.disabled=busy;});
+}
 function connect(action){
   if(warming||(ws&&(ws.readyState===0||ws.readyState===1)))return;
+  clearTimeout(retryTimer);connectionNotice('Opening your game. This can take about a minute if the server is waking up.',true);
   if(backendOrigin===location.origin){openSocket(action);return;}
   warming=true;manualClose=false;var generation=++connectGeneration,deadline=Date.now()+90000;
   connection.textContent='Waking up the game server…';
   function attempt(){
-    var abort=new AbortController(),timeout=setTimeout(function(){abort.abort();},8000);
-    fetch(apiPath('/health'),{credentials:'omit',signal:abort.signal}).then(function(r){if(!r.ok)throw Error('Not ready');return r.json();}).then(function(body){
-      clearTimeout(timeout);if(generation!==connectGeneration)return;if(!body.ok)throw Error('Not ready');warming=false;openSocket(action);
-    }).catch(function(){clearTimeout(timeout);if(generation!==connectGeneration)return;if(Date.now()<deadline){retryTimer=setTimeout(attempt,2500);}else{warming=false;connection.textContent='Please try again';toast('The game server is taking longer to wake up. Please try again in a moment.');}});
+    if(generation!==connectGeneration)return;
+    // XMLHttpRequest timeout works on TV browsers that lack AbortController.
+    var request=new XMLHttpRequest(),settled=false;healthRequest=request;
+    function finish(ok){
+      if(settled)return;settled=true;if(generation!==connectGeneration)return;healthRequest=null;
+      if(ok){warming=false;openSocket(action);return;}
+      if(Date.now()<deadline){retryTimer=setTimeout(attempt,2500);}else{warming=false;connection.textContent='Please try again';connectionNotice('We could not reach the game server. Please try again. If it keeps happening, check this device’s internet connection.',false);}
+    }
+    request.onload=function(){var ok=false;try{ok=request.status===200&&JSON.parse(request.responseText).ok===true;}catch(e){}finish(ok);};
+    request.onerror=request.ontimeout=function(){finish(false);};
+    try{request.open('GET',apiPath('/health'),true);request.timeout=8000;request.send();}catch(e){finish(false);}
   }
   attempt();
 }
 function openSocket(action){
   if(action&&ws&&(ws.readyState===0||ws.readyState===1))return;
   pendingAction=action||null;manualClose=false;clearTimeout(retryTimer);connection.textContent='Connecting…';
-  ws=new WebSocket(backendOrigin.replace(/^http/,'ws')+'/ws');
+  try{ws=new WebSocket(backendOrigin.replace(/^http/,'ws')+'/ws');}catch(e){connection.textContent='Connection unavailable';connectionNotice('This browser could not open the game connection. Please try again or use another browser.',false);return;}
+  var socket=ws;socketTimer=setTimeout(function(){if(ws===socket&&!session){connection.textContent='Please try again';manualClose=true;socket.close();ws=null;connectionNotice('The game connection timed out. Please try again.',false);}},15000);
   ws.onopen=function(){retry=0;connection.textContent='Connected';if(pendingAction){send(pendingAction);pendingAction=null;}else if(session)send(session.token?{type:'resume',code:session.code,token:session.token}:{type:'watch',code:session.code});};
   ws.onmessage=function(event){var m;try{m=JSON.parse(event.data);}catch(e){return;}
-    if(m.type==='joined'){var rejoining=!!session;session={code:m.code,role:m.role,token:m.token};saveSession();if(m.midGame&&!rejoining)toast('You’re in! Join this question if there’s time. Your score starts at zero.');connection.textContent=m.role==='viewer'?'Watching live':'Connected';}
+    if(m.type==='joined'){clearTimeout(socketTimer);connectionNotice('',false);var rejoining=!!session;session={code:m.code,role:m.role,token:m.token};saveSession();if(m.midGame&&!rejoining)toast('You’re in! Join this question if there’s time. Your score starts at zero.');connection.textContent=m.role==='viewer'?'Watching live':'Connected';}
     if(m.type==='state'){clockOffset=m.serverNow-performance.now();state=m;seq=Math.max(seq,m.self?m.self.lastSeq+1:0);render();}
-    if(m.type==='error'){toast(errors[m.code]||'That action is unavailable. Please try again.');if(['INVALID_TOKEN','ROOM_NOT_FOUND','ROOM_EXPIRED'].indexOf(m.code)>=0){leave(false);}else if(!session){manualClose=true;ws.close();connection.textContent='Let’s play';}}
+    if(m.type==='error'){clearTimeout(socketTimer);connectionNotice('',false);toast(errors[m.code]||'That action is unavailable. Please try again.');if(['INVALID_TOKEN','ROOM_NOT_FOUND','ROOM_EXPIRED'].indexOf(m.code)>=0){leave(false);}else if(!session){manualClose=true;ws.close();connection.textContent='Let’s play';}}
     if(m.type==='answerAccepted'){connection.textContent='Answer saved';}
   };
-  ws.onclose=function(event){if(manualClose)return;connection.textContent='Reconnecting…';if(state)updateRound();if(event.code===4001){manualClose=true;connection.textContent='Open on another device';toast('This player reconnected in another tab. Return home to join separately.');return;}if(session){retryTimer=setTimeout(function(){connect();},Math.min(10000,1000*Math.pow(1.5,retry++)));}else connection.textContent='Connection lost';};
+  ws.onclose=function(event){clearTimeout(socketTimer);if(manualClose)return;connection.textContent='Reconnecting…';if(state)updateRound();if(event.code===4001){manualClose=true;connection.textContent='Open on another device';toast('This player reconnected in another tab. Return home to join separately.');return;}if(session){retryTimer=setTimeout(function(){connect();},Math.min(10000,1000*Math.pow(1.5,retry++)));}else{connection.textContent='Connection lost';connectionNotice('The game connection was interrupted. Please try again.',false);}};
   ws.onerror=function(){connection.textContent='Connection unavailable';};
 }
-function leave(showHome){connectGeneration++;warming=false;manualClose=true;clearTimeout(retryTimer);if(ws)ws.close();ws=null;session=null;state=null;viewKey='';priorSelection=null;saveSession();connection.textContent='Let’s play';if(showHome!==false)history.replaceState(null,'',location.pathname);renderHome();}
+function leave(showHome){connectGeneration++;warming=false;clearTimeout(socketTimer);if(healthRequest){healthRequest.abort();healthRequest=null;}connectionNotice('',false);manualClose=true;clearTimeout(retryTimer);if(ws)ws.close();ws=null;session=null;state=null;viewKey='';priorSelection=null;saveSession();connection.textContent='Let’s play';if(showHome!==false)history.replaceState(null,'',location.pathname);renderHome();}
 function homeSettings(){return {category:'bible',questionsPerRound:5};}
 function renderHome(){
   document.body.classList.remove('learning','playing');
@@ -128,6 +144,7 @@ function finalScorecard(players){
 }
 function buildResults(){app.innerHTML='<section class="results"><div class="eyebrow">That’s a wrap</div><div class="trophy" aria-hidden="true">✦</div><h1 id="winner"></h1><p class="lede results-lede">Good guesses. Great company. One more round?</p><div class="panel"><div class="side-heading">The final scores</div><div id="final-scores"></div></div><div class="results-actions"><button class="btn" id="rematch">Play again ↗</button><button class="btn secondary" id="leave">Back to home</button></div><p class="tiny" id="results-help"></p></section>';document.getElementById('rematch').onclick=function(){send({type:'rematch'});};document.getElementById('leave').onclick=function(){leave(true);};}
 function updateResults(){var players=state.players.slice().sort(function(a,b){return b.score-a.score;});var top=players.filter(function(p){return p.score===players[0].score;});document.getElementById('winner').textContent=players.length===1?players[0].score.toLocaleString()+' points. Nicely played.':top.length>1?'A shared victory!':top[0].name+' takes the win!';setMarkup('final-scores',finalScorecard(players));document.getElementById('rematch').hidden=!state.canRematch;document.getElementById('results-help').textContent=state.canRematch?'Play again to return to the lobby and choose your next match.':'Any player can start a rematch.';}
+document.getElementById('cancel-connect').onclick=function(){leave(true);};
 document.getElementById('fullscreen').onclick=function(){if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen();else if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen();};
 document.addEventListener('keydown',function(e){if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)||e.repeat)return;var i=letters.indexOf(e.key.toUpperCase());if(i>=0&&state&&state.phase==='question'){var b=document.getElementById('option-'+state.round.options[i].id);if(b&&!b.disabled)b.click();}});
 document.addEventListener('visibilitychange',function(){if(!document.hidden&&session&&ws&&ws.readyState===1)send({type:'sync'});});
