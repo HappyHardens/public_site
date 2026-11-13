@@ -208,6 +208,7 @@ function updateLearning(){
   document.getElementById('verse-reference').textContent=state.round.reference.label+' · NLT';
   document.getElementById('verse-credit').textContent=scripture.status==='ready'?(scripture.credit||'NLT · Tyndale House Publishers'):'';
   var players=state.players.slice().sort(function(a,b){return ((b.result&&b.result.points)||0)-((a.result&&a.result.points)||0)||b.score-a.score;});
+  document.getElementById('lesson-scores').parentNode.style.setProperty('--lesson-count',Math.min(9,players.length));
   setMarkup('lesson-scores',players.slice(0,9).map(function(p){return '<li><span class="gain-name">'+esc(p.name)+'</span><strong>+'+((p.result&&p.result.points)||0)+'</strong></li>';}).join(''));
   var self=state.self&&players.find(function(p){return p.id===state.self.id;});document.getElementById('your-gain').textContent=self?'You earned +'+((self.result&&self.result.points)||0)+' points':'';
   scheduleScoreFit();
