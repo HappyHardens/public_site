@@ -281,3 +281,16 @@ body.learning .topbar{display:none}.learning-screen{flex:1;min-height:0;display:
   #app[data-screen=finished] .score-table .first-place .final-name{font-size:26px}
   [data-screen=finished] .results-actions{flex:none;padding-top:4px}
 }
+
+/* Use margins for the TV home stack: older Samsung browsers ignore gap. */
+.couch-home{--home-copy-space:38px;--home-button-space:16px;--home-action-offset:10px}
+.couch-home .hero-copy{gap:0}
+.couch-home .game-intro{margin-top:var(--home-copy-space)}
+.couch-home .hero-actions{display:flex;flex-direction:column;gap:0;margin-top:calc(var(--home-copy-space) + var(--home-action-offset))}
+.couch-home .hero-actions>.btn{flex:none;width:100%}
+.couch-home .hero-actions>.btn+.btn{margin-top:var(--home-button-space)}
+@media(min-width:1700px) and (min-height:1000px){.couch-home{--home-copy-space:46px}}
+@media(max-height:750px) and (min-width:701px){.couch-home{--home-copy-space:26px;--home-button-space:12px}}
+@media(max-width:700px){.couch-home{--home-copy-space:15px;--home-button-space:10px;--home-action-offset:2px}}
+@media(max-height:650px) and (max-width:700px){.couch-home{--home-copy-space:12px;--home-button-space:7px}}
+@media(max-height:500px) and (min-width:701px){.couch-home{--home-copy-space:16px;--home-button-space:7px;--home-action-offset:5px}}
