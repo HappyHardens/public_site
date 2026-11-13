@@ -294,3 +294,71 @@ body.learning .topbar{display:none}.learning-screen{flex:1;min-height:0;display:
 @media(max-width:700px){.couch-home{--home-copy-space:15px;--home-button-space:10px;--home-action-offset:2px}}
 @media(max-height:650px) and (max-width:700px){.couch-home{--home-copy-space:12px;--home-button-space:7px}}
 @media(max-height:500px) and (min-width:701px){.couch-home{--home-copy-space:16px;--home-button-space:7px;--home-action-offset:5px}}
+
+/* TV lobby spacing must also work without flex gap or the modern grid-gap alias. */
+#room-capacity{font-size:18px;font-weight:bold;color:var(--teal);margin-top:6px}
+@media(min-width:701px){
+  [data-screen=lobby] .room-layout{grid-template-columns:minmax(0,1fr) 26%;gap:0;grid-gap:0}
+  .lobby-invite{margin-left:24px}
+  .lobby-invite .join-panel{height:100%;padding:24px 16px;justify-content:flex-start;gap:0}
+  .lobby-invite .eyebrow{font:34px/1.1 Lilita,Arial;letter-spacing:0;color:var(--gold);margin-bottom:auto}
+  .lobby-invite .room-code{font-size:70px;font-size:6vw;line-height:1;letter-spacing:3px;margin-top:22px}
+  .lobby-invite .qr{flex:none;width:180px;height:180px;width:17vw;height:17vw;max-width:260px;max-height:260px;margin-top:22px;margin-bottom:22px}
+  .lobby-invite .join-link{font-size:26px;font-size:2vw;line-height:1.3;font-weight:bold;text-decoration:none}
+  .lobby-invite .join-link span{display:block}
+  .lobby-invite .join-link span:last-child{color:var(--gold);font-size:1.2em}
+  .lobby-invite #network-help{display:block;font-size:22px;line-height:1.3;margin-top:14px;margin-bottom:auto}
+  .lobby-players{gap:0}
+  .lobby-players .settings{gap:0;grid-gap:0}
+  .lobby-players .setting-card:first-child{margin-right:8px}
+  .lobby-players .setting-card:last-child{margin-left:8px}
+  .roster-heading{flex:none;margin:22px 0 10px}
+  #player-count{font:30px/1.15 Lilita,Arial;letter-spacing:.4px;color:var(--teal)}
+  #app #players{grid-template-columns:repeat(2,minmax(0,1fr));gap:0;grid-gap:0;column-gap:0}
+  #app #players .player-row{gap:0;padding:8px 0}
+  #app #players .player-row:nth-child(odd){margin-right:22px}
+  #app #players .player-row:nth-child(even){margin-left:22px}
+  #players .player-name{margin-left:10px}
+  #players .player-status{margin-left:12px;white-space:nowrap}
+  #players{--lobby-name-size:30px;--lobby-status-size:18px;--lobby-avatar-size:36px}
+  #lobby-help{margin-top:14px;margin-bottom:16px}
+}
+@media(min-width:1700px) and (min-height:1000px){
+  .lobby-invite{margin-left:32px}.lobby-invite .join-panel{padding:32px 20px}
+  .lobby-invite .eyebrow{font-size:46px}.lobby-invite .room-code{font-size:110px}
+  .lobby-invite .qr{margin-top:32px;margin-bottom:32px}.lobby-invite #network-help{font-size:28px;margin-top:22px}
+  #player-count{font-size:40px}.roster-heading{margin-top:28px;margin-bottom:16px}#room-capacity{font-size:24px}
+  #players{--lobby-name-size:42px;--lobby-status-size:25px;--lobby-avatar-size:50px}
+}
+@media(max-height:750px) and (min-width:701px){
+  .lobby-invite .join-panel{padding:18px 12px}.lobby-invite .eyebrow{font-size:30px}
+  .lobby-invite .room-code{font-size:64px;margin-top:16px}.lobby-invite .qr{width:170px;height:170px;margin:16px 0}
+  .lobby-invite #network-help{font-size:19px;margin-top:12px}.roster-heading{margin:18px 0 8px}
+  #player-count{font-size:27px}#app #players .player-row{padding:5px 0}
+  #lobby-help{margin-top:8px;margin-bottom:12px}
+}
+@media(max-height:500px) and (min-width:701px){
+  .lobby-invite .join-panel{padding:10px}.lobby-invite .eyebrow{font-size:24px}
+  .lobby-invite .room-code{font-size:42px;margin-top:8px}.lobby-invite .qr{width:100px;height:100px;margin:8px 0}
+  .lobby-invite .join-link{font-size:19px}.lobby-invite #network-help{font-size:14px;margin-top:6px}
+  .roster-heading{margin:10px 0 4px}#player-count{font-size:21px}#room-capacity{font-size:13px;margin-top:2px}
+  #players{--lobby-name-size:21px;--lobby-status-size:12px;--lobby-avatar-size:24px}
+  #app #players .player-row{padding:1px 0}#lobby-help{margin:4px 0 6px}
+}
+@media(max-width:700px){#player-count{font:22px/1.15 Lilita,Arial}#room-capacity{font-size:14px;margin-top:4px}}
+@media(min-width:701px){
+  #app.large-room #players .player-row{padding-top:0;padding-bottom:0}
+  #app.large-room #players .avatar{display:none}
+  #app.large-room #players .player-name{margin-left:0}
+}
+@media(max-height:750px) and (min-width:701px){
+  #app.large-room .setting-card{padding:6px 8px}
+  #app.large-room .setting-card label{font-size:15px;margin-bottom:2px}
+  #app.large-room .setting-card select{font-size:23px;min-height:29px;padding:1px 3px}
+  #app.large-room .round-total{font-size:12px}
+  #app.large-room .roster-heading{margin-top:14px;margin-bottom:6px}
+  #app.large-room #player-count{font-size:25px}
+  #app.large-room #room-capacity{font-size:15px;margin-top:3px}
+  #app.large-room #players{--lobby-name-size:27px;--lobby-status-size:17px}
+  #app.large-room #lobby-help{font-size:22px;margin:8px 0 10px}
+}
