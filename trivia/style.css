@@ -622,3 +622,23 @@ body.learning .topbar{display:none}.learning-screen{flex:1;min-height:0;display:
 
 /* Clear phone camera cutouts when the answer screen hides the header. */
 @media(max-width:700px){body.learning #app{padding-top:36px;padding-top:max(36px,calc(env(safe-area-inset-top,0px) + 16px))}}
+
+/* TV settings use real game cards instead of the television's native dropdown. */
+.setting-picker-trigger{display:none}
+@media(min-width:701px){
+ .settings .setting-card select{display:none}
+ .setting-picker-trigger{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:46px;background:transparent;border:0;border-radius:8px;color:var(--ink);text-align:left;padding:4px 5px;font:30px/1.15 Lilita,Arial}
+ .setting-picker-trigger:disabled{opacity:1}.setting-picker-trigger:disabled .picker-change{display:none}
+ .picker-change{font:bold 15px/1.2 Arial;margin-left:14px;white-space:nowrap}
+ .setting-picker-trigger:focus{outline:4px solid var(--orange);outline-offset:3px}
+}
+.setting-picker{position:fixed;inset:0;top:0;right:0;bottom:0;left:0;z-index:100;display:flex;align-items:center;justify-content:center;background:rgba(17,47,55,.8);padding:24px}
+.picker-panel{width:100%;max-width:1040px;max-height:100%;overflow:auto;background:var(--cream,#fff7e4);border:3px solid var(--ink);border-radius:28px;padding:30px;box-shadow:0 10px 0 rgba(0,0,0,.2)}
+.picker-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}.picker-top .eyebrow{font-size:16px;margin-bottom:8px}.picker-top h2{font:44px/1.1 Lilita,Arial;color:var(--ink)}.picker-close{flex:none;margin-left:24px;font-size:22px}
+.picker-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-gap:24px}.picker-choices.round-choices{grid-template-columns:repeat(3,minmax(0,1fr))}
+.picker-choice{display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:24px;border:3px solid var(--ink);border-radius:20px;background:var(--white);color:var(--ink);box-shadow:0 6px 0 var(--ink)}
+.picker-symbol{display:flex;align-items:center;justify-content:center;background:#dcebd4;border-radius:14px;min-width:64px;height:64px;padding:0 10px;font:44px/1 Lilita,Arial;margin-bottom:16px}.picker-choice strong{font:36px/1.1 Lilita,Arial;margin-bottom:12px}.picker-description{font:21px/1.35 Arial;flex:1}.picker-selected{visibility:hidden;font:bold 17px/1 Arial;border-radius:16px;background:var(--ink);color:white;padding:7px 12px;margin-top:18px}
+.picker-choice[aria-pressed=true]{background:var(--gold)}.picker-choice[aria-pressed=true] .picker-selected{visibility:visible}.picker-choice:focus{outline:5px solid var(--orange);outline-offset:5px}.picker-hint{font-size:20px;text-align:center;margin-top:25px;color:var(--muted)}
+@media(min-width:1700px) and (min-height:1000px){.setting-picker-trigger{font-size:38px;min-height:56px}.picker-change{font-size:21px}.picker-panel{max-width:1350px;padding:40px}.picker-top h2{font-size:60px}.picker-choice{padding:32px}.picker-choice strong{font-size:48px}.picker-description{font-size:28px}.picker-symbol{font-size:58px;height:84px;min-width:84px}.picker-hint,.picker-close{font-size:27px}}
+@media(max-height:650px){.picker-panel{padding:22px}.picker-top{margin-bottom:20px}.picker-top h2{font-size:34px}.picker-choice{padding:18px}.picker-choice strong{font-size:28px}.picker-description{font-size:18px}.picker-symbol{height:45px;min-width:45px;font-size:32px;margin-bottom:10px}.picker-selected{margin-top:12px}.picker-hint{margin-top:20px;font-size:17px}}
+@media(max-width:700px){.setting-picker{padding:14px}.picker-choices,.picker-choices.round-choices{grid-template-columns:1fr}.picker-top h2{font-size:27px}.picker-close{font-size:17px;margin-left:12px}.picker-panel{padding:18px}}
