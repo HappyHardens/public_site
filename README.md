@@ -35,3 +35,7 @@ Add only playable games. Use a real destination URL, an accessible title and art
 `trivia/` contains only the public UI copied from `HappyHardens/games`, branch `codex/trivia-v1`, directory `games/trivia/public/`. The private question bank and server stay in that repository. The browser remains on HappyHardens.com while its runtime configuration directs API and WebSocket requests to the separate Render multiplayer service. Configure that service with `PUBLIC_URL=https://happyhardens.com/trivia/` so links and QR codes return to this site.
 
 When updating Trivia, copy its public assets again, then preserve the production `trivia/runtime-config.js`. Deploy the compatible backend before publishing the updated static site.
+
+## TrailBlazers
+
+TrailBlazers is available at `/trailblazers/` with controllers at `/trailblazers/join/`. Its separate Render multiplayer service is `happy-hardens-trailblazers` (Node 22, one free instance, manual deployments), built from `HappyHardens/games` branch `codex/trailblazers-v1`, root `games/trailblazers`. Browser assets are exported by that game’s `scripts/export-static.js` with content-hashed CSS/JS; keep `/trailblazers/` in the static build. Backend restarts expire in-memory rooms. The first connection may take a minute while the server wakes.

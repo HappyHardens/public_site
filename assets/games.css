@@ -80,3 +80,7 @@ body{background:radial-gradient(ellipse at top right,#ffe3aa70,transparent 65%),
   .trivia-card .game-details li{padding:6px 8px}
   .trivia-card .game-tagline{font-size:23px}
 }
+
+/* TrailBlazers shares the Trivia card layout and Happy Hardens identity. */
+.trailblazers-card h3{font-size:clamp(38px,4.5vw,66px)}
+@media(max-width:480px){.trailblazers-card h3{font-size:40px}}

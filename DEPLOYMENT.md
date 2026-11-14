@@ -19,3 +19,7 @@ Existing static site: happy-hardens, srv-dbqv5o61egvs73e001r0. DNS and CouchDood
 ## TV connection compatibility update
 
 November 12, 2026: replaced the startup health check's AbortController requirement with XMLHttpRequest and its native timeout. A regression harness reproduced the old Host failure when AbortController was absent; the new startup, retry, cancellation, and stalled-connection checks pass (32 total tests). Connection progress and failures now appear in a prominent banner with Cancel/Dismiss, and the home controls recover after errors. Asset URLs are versioned for this update so reloading the TV page requests the new JavaScript. This reproduces the missing-feature failure, but the user's physical Samsung TV still needs confirmation.
+
+## TrailBlazers
+
+TrailBlazers is available at `/trailblazers/` with controllers at `/trailblazers/join/`. Its separate Render multiplayer service is `happy-hardens-trailblazers` (Node 22, one free instance, manual deployments), built from `HappyHardens/games` branch `codex/trailblazers-v1`, root `games/trailblazers`. Browser assets are exported by that game’s `scripts/export-static.js` with content-hashed CSS/JS; keep `/trailblazers/` in the static build. Backend restarts expire in-memory rooms. The first connection may take a minute while the server wakes.
