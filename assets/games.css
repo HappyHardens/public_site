@@ -84,3 +84,19 @@ body{background:radial-gradient(ellipse at top right,#ffe3aa70,transparent 65%),
 /* TrailBlazers shares the Trivia card layout and Happy Hardens identity. */
 .trailblazers-card h3{font-size:clamp(38px,4.5vw,66px)}
 @media(max-width:480px){.trailblazers-card h3{font-size:40px}}
+
+/* Original card-game preview, using the Trivia brand assets. */
+.ysw-card h3{font-size:clamp(40px,4.8vw,68px)}
+.ysw-art{background:#e4efdc;display:flex;align-items:center;justify-content:center;padding:32px;min-height:440px;overflow:hidden}
+.ysw-preview{position:relative;width:100%;max-width:580px;height:390px}
+.ysw-prompt,.ysw-answer{position:absolute;width:68%;border:2px solid #12383d;border-radius:19px;box-shadow:6px 7px 0 #12383d22;display:flex;flex-direction:column;gap:18px;padding:23px}
+.ysw-prompt{left:0;top:5px;min-height:245px;transform:rotate(-8deg);background:#247568;color:#fff7e6}
+.ysw-answer{right:0;bottom:0;width:58%;min-height:238px;transform:rotate(8deg);background:#fffdf5;color:#12383d}
+.ysw-brand{object-fit:contain;align-self:flex-start;background:#fff7e6;border-radius:7px;padding:3px;max-width:120px;height:44px}
+.ysw-label{font-size:9px;letter-spacing:1.5px;font-weight:bold}
+.ysw-prompt strong,.ysw-answer strong{font:32px/1.05 Lilita,Arial,sans-serif;letter-spacing:-.3px}
+.ysw-prompt em{font-style:normal;color:#ffd45c}
+.ysw-spark{position:absolute;right:0;top:0;color:#ec754f;font-size:90px;line-height:1}
+.ysw-answer-star{align-self:flex-end;color:#ec754f;font-size:30px;line-height:1}
+@media(max-width:760px){.ysw-art{min-height:420px;padding:24px}.ysw-preview{max-width:470px;height:370px}.ysw-card h3{font-size:51px}}
+@media(max-width:480px){.ysw-art{min-height:360px;padding:20px}.ysw-preview{height:320px}.ysw-prompt,.ysw-answer{padding:15px;gap:12px}.ysw-prompt{min-height:215px;width:75%}.ysw-answer{min-height:205px;width:62%}.ysw-prompt strong,.ysw-answer strong{font-size:27px}.ysw-spark{font-size:65px}.ysw-brand{width:100px;height:37px}.ysw-card h3{font-size:45px}}

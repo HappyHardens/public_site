@@ -23,3 +23,11 @@ November 12, 2026: replaced the startup health check's AbortController requireme
 ## TrailBlazers
 
 TrailBlazers is available at `/trailblazers/` with controllers at `/trailblazers/join/`. Its separate Render multiplayer service is `happy-hardens-trailblazers` (Node 22, one free instance, manual deployments), built from `HappyHardens/games` branch `codex/trailblazers-v1`, root `games/trailblazers`. Browser assets are exported by that game’s `scripts/export-static.js` with content-hashed CSS/JS; keep `/trailblazers/` in the static build. Backend restarts expire in-memory rooms. The first connection may take a minute while the server wakes.
+
+## You Said What?
+
+The library links to the standalone game at https://happy-hardens-you-said-what.onrender.com/ . The same single-instance Render Node service serves its public UI and WebSocket rooms. Render service: `srv-dbscksuc6qcc738qaqsg`; branch: `codex/you-said-what-v1` in `HappyHardens/games`; root: `games/you-said-what`. The initial deployed commit is `2317114`, deployment `dep-dbsckt6c6qcc738qarm0`.
+
+Hosting uses the free plan, Node 22, production mode, a `/health` check, and manual backend deployments. Local test bots are disabled. Free instances can take a moment to wake after inactivity. The game uses in-memory rooms; restarting the backend ends active games. The revised deck and 10-second winner celebration are included.
+
+The library card uses the existing Trivia wordmark and CSS-rendered game cards. `assets/games.css` is the editable source; the homepage references a content-hashed copy to avoid stale styles. Existing game files and deployment settings are preserved.
