@@ -248,6 +248,10 @@ function fadingQuestionScreen(answerId){
 function lessonJoinCard(){
   return '<div class="lesson-rejoin"><img src="'+esc(apiPath('/api/qr?room='+state.code))+'" alt="Scan to join or rejoin this game"><div><h3>Join / rejoin</h3><strong>'+esc(state.code)+'</strong><a href="'+esc(joinLink())+'" target="_blank" rel="noopener">HappyHardens.com/trivia/join</a><p>Back on your phone? Scan to return.</p></div></div>';
 }
+function scriptureReference(){
+  var ref=state.round.reference,label=esc(ref.label)+' · NLT';
+  return state.self?'<a class="scripture-link" href="'+esc(ref.url)+'" target="_blank" rel="noopener noreferrer" aria-label="'+esc(ref.label)+' · NLT (opens in a new tab)">'+label+' <span aria-hidden="true">↗</span></a>':label;
+}
 function buildLearning(){
   var r=state.round,answer=r.options.find(function(o){return o.id===r.answerId;}),letter=letters[r.options.indexOf(answer)];
   var old=document.getElementById('option-'+answer.id),oldLabel=old&&old.children[1];
@@ -257,7 +261,7 @@ function buildLearning(){
   if(!skip)fadingQuestionScreen(answer.id);
   document.body.classList.add('learning');setScreen('learning');lessonContentKey='';
   var isBible=state.settings.category==='bible';
-  app.innerHTML='<section class="learning-screen'+(isBible?'':' general-lesson')+'"><div class="learning-answer" id="learning-answer"><span class="learning-letter">'+letter+'.</span> <span class="learning-label">'+esc(answer.label)+'</span></div><div class="lesson-layout"><div class="lesson-reading"><h3 class="lesson-heading">The story behind the answer</h3><p class="learning-fact">'+esc(r.explanation)+'</p>'+(isBible?'<section class="verse-card" aria-label="Bible passage"><h3 id="verse-reference">'+esc(r.reference.label)+' · NLT</h3><p id="verse-text" aria-live="polite" tabindex="0" aria-label="Bible verses">Loading the passage…</p><p class="verse-credit" id="verse-credit"></p></section>':'<p class="lesson-source">Fact source: <a href="'+esc(r.reference.url)+'" target="_blank" rel="noopener">'+esc(r.reference.label)+'</a></p>')+'</div><div class="lesson-sidebar"><aside class="lesson-scores"><h3>Points this question</h3><p class="your-gain" id="your-gain"></p><ol class="lesson-score-list" id="lesson-scores"></ol></aside>'+(!state.self?lessonJoinCard():'')+'</div></div><div class="lesson-footer"><p class="continue-countdown" id="continue-countdown" role="timer"></p><p class="helper">Talk it over, then tap Continue here or on a player’s phone.</p>'+(state.self||state.role==='host'?'<button class="btn" id="continue">Continue →</button>':'')+(!state.self?'<button class="text-button" id="lesson-home">Back to home</button>':'')+'</div></section>';
+  app.innerHTML='<section class="learning-screen'+(isBible?'':' general-lesson')+'"><div class="learning-answer" id="learning-answer"><span class="learning-letter">'+letter+'.</span> <span class="learning-label">'+esc(answer.label)+'</span></div><div class="lesson-layout"><div class="lesson-reading"><h3 class="lesson-heading">The story behind the answer</h3><p class="learning-fact">'+esc(r.explanation)+'</p>'+(isBible?'<section class="verse-card" aria-label="Bible passage"><h3 id="verse-reference">'+scriptureReference()+'</h3><p id="verse-text" aria-live="polite" tabindex="0" aria-label="Bible verses">Loading the passage…</p><p class="verse-credit" id="verse-credit"></p></section>':'<p class="lesson-source">Fact source: <a href="'+esc(r.reference.url)+'" target="_blank" rel="noopener">'+esc(r.reference.label)+'</a></p>')+'</div><div class="lesson-sidebar"><aside class="lesson-scores"><h3>Points this question</h3><p class="your-gain" id="your-gain"></p><ol class="lesson-score-list" id="lesson-scores"></ol></aside>'+(!state.self?lessonJoinCard():'')+'</div></div><div class="lesson-footer"><p class="continue-countdown" id="continue-countdown" role="timer"></p><p class="helper">Talk it over, then tap Continue here or on a player’s phone.</p>'+(state.self||state.role==='host'?'<button class="btn" id="continue">Continue →</button>':'')+(!state.self?'<button class="text-button" id="lesson-home">Back to home</button>':'')+'</div></section>';
   if(state.self||state.role==='host')document.getElementById('continue').onclick=function(){send({type:'continue',roundId:state.round.id});};
   var home=document.getElementById('lesson-home');if(home)home.onclick=function(){leave(true);};
   var el=document.getElementById('learning-answer');
@@ -280,7 +284,7 @@ function updateLearning(){
   var key=JSON.stringify([scripture,state.players]);if(key===lessonContentKey)return;lessonContentKey=key;
   var text=document.getElementById('verse-text');
   if(text){text.textContent=verses.length?verses.map(function(verse){return verse.number+' '+verse.text;}).join(' '):scripture.status==='unavailable'?'The passage could not load right now. You can still discuss the lesson and continue.':'Loading the passage…';
-  document.getElementById('verse-reference').textContent=state.round.reference.label+' · NLT';
+  setMarkup('verse-reference',scriptureReference());
   document.getElementById('verse-credit').textContent=scripture.status==='ready'?(scripture.credit||'NLT · Tyndale House Publishers'):'';}
   var players=state.players.slice().sort(function(a,b){return ((b.result&&b.result.points)||0)-((a.result&&a.result.points)||0)||b.score-a.score;});
   document.getElementById('lesson-scores').parentNode.style.setProperty('--lesson-count',Math.min(9,players.length));

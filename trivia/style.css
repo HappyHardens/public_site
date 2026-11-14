@@ -616,3 +616,6 @@ body.learning .topbar{display:none}.learning-screen{flex:1;min-height:0;display:
 @media(max-height:750px) and (min-width:701px){.lesson-rejoin{padding:9px;margin-top:12px}.lesson-rejoin img{width:96px;height:96px;margin-right:10px}.lesson-rejoin strong{font-size:30px}.lesson-rejoin h3{font-size:20px}.lesson-rejoin p,.lesson-rejoin a{font-size:12px}}
 @media(max-width:700px){.lesson-sidebar{flex:none}.lesson-rejoin{display:none}}
 @media(max-height:500px) and (min-width:701px){.lesson-rejoin{padding:6px;margin-top:8px}.lesson-rejoin img{width:70px;height:70px}.lesson-rejoin h3{font-size:16px}.lesson-rejoin strong{font-size:24px}.lesson-rejoin p{display:none}.lesson-footer .btn{min-width:130px}.lesson-footer #lesson-home{font-size:13px}}
+
+/* Keep Scripture study in a separate tab while the player stays in the game. */
+.scripture-link{color:inherit;text-decoration:underline;text-underline-offset:3px;display:inline-block;padding:4px 0}.scripture-link:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:3px}
