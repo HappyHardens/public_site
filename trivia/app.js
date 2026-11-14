@@ -333,7 +333,8 @@ function updateLearning(){
   scheduleScoreFit();
 }
 function buildIntermission(){
-  app.innerHTML='<section class="results"><header class="results-heading"><div class="eyebrow">ROUND '+state.matchRound+' COMPLETE</div><h1>The stakes are rising!</h1><p>Next round: '+(state.matchRound+1)+'× points</p></header><div class="scoreboard">'+finalScorecard(state.players.slice().sort(function(a,b){return b.score-a.score;}))+'</div><div class="break-countdown">Next round in <strong id="break-timer">8</strong></div></section>';
+  var rows=state.players.length>10?Math.ceil(state.players.length/2):Math.max(1,state.players.length);
+  app.innerHTML='<section class="results"><header class="results-heading"><div class="eyebrow">ROUND '+state.matchRound+' COMPLETE</div><h1>The stakes are rising!</h1><p>Next round: '+(state.matchRound+1)+'× points</p></header><div class="scoreboard" role="region" aria-label="Round totals" tabindex="0" style="--summary-rows:'+rows+'">'+finalScorecard(state.players.slice().sort(function(a,b){return b.score-a.score;}))+'</div><div class="break-countdown">Next round in <strong id="break-timer">8</strong></div></section>';
 }
 // Fit unusually long names/numbers within the available score rows, without truncating them.
 var scoreFitFrame=0;

@@ -263,22 +263,22 @@ body.learning .topbar{display:none}.learning-screen{flex:1;min-height:0;display:
 
 /* Phone final scores scroll independently; replay stays within reach. */
 @media(max-width:700px){
-  [data-screen=finished] .scoreboard{overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;gap:8px;padding-right:3px}
-  #app[data-screen=finished] .score-table{position:relative;flex:none;gap:0;margin:0}
-  #app[data-screen=finished] .score-table thead{display:block;position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
-  #app[data-screen=finished] .score-table tbody{flex:none;grid-auto-rows:auto;gap:8px}
-  #app[data-screen=finished] .score-table tbody tr{grid-template-columns:28px repeat(3,minmax(0,1fr)) minmax(65px,1.15fr);grid-template-rows:32px 42px;gap:4px 6px;padding:8px;border:1px solid var(--line);border-radius:14px;background:var(--white)}
-  #app[data-screen=finished] .score-table tbody th,#app[data-screen=finished] .score-table tbody td{padding:0;border:0;border-radius:0;background:transparent!important}
-  #app[data-screen=finished] .score-table .final-rank{grid-column:1;grid-row:1/3;font-size:21px;align-self:center}
-  #app[data-screen=finished] .score-table .final-name{grid-column:2/-1;grid-row:1;font-size:23px;white-space:nowrap;overflow-wrap:normal;line-height:1.15}
-  #app[data-screen=finished] .score-table td[data-label]{grid-row:2;flex-direction:column;align-items:flex-start;justify-content:center;font-size:21px;line-height:1.1;gap:3px}
-  #app[data-screen=finished] .score-table td:nth-child(3){grid-column:2}
-  #app[data-screen=finished] .score-table td:nth-child(4){grid-column:3}
-  #app[data-screen=finished] .score-table td:nth-child(5){grid-column:4}
-  #app[data-screen=finished] .score-table td:nth-child(6){grid-column:5;font-size:25px;align-items:flex-end}
-  #app[data-screen=finished] .score-table td[data-label]:before{content:attr(data-label);font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;opacity:.8}
-  #app[data-screen=finished] .score-table tr.first-place{background:var(--ink);border-color:var(--ink)}
-  #app[data-screen=finished] .score-table .first-place .final-name{font-size:26px}
+  [data-screen=finished] .scoreboard,  [data-screen=intermission] .scoreboard{overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;gap:8px;padding-right:3px}
+  #app[data-screen=finished] .score-table,  #app[data-screen=intermission] .score-table{position:relative;flex:none;gap:0;margin:0}
+  #app[data-screen=finished] .score-table thead,  #app[data-screen=intermission] .score-table thead{display:block;position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+  #app[data-screen=finished] .score-table tbody,  #app[data-screen=intermission] .score-table tbody{flex:none;grid-auto-rows:auto;gap:8px}
+  #app[data-screen=finished] .score-table tbody tr,  #app[data-screen=intermission] .score-table tbody tr{grid-template-columns:28px repeat(3,minmax(0,1fr)) minmax(65px,1.15fr);grid-template-rows:32px 42px;gap:4px 6px;padding:8px;border:1px solid var(--line);border-radius:14px;background:var(--white)}
+  #app[data-screen=finished] .score-table tbody th,#app[data-screen=finished] .score-table tbody td,  #app[data-screen=intermission] .score-table tbody th,#app[data-screen=intermission] .score-table tbody td{padding:0;border:0;border-radius:0;background:transparent!important}
+  #app[data-screen=finished] .score-table .final-rank,  #app[data-screen=intermission] .score-table .final-rank{grid-column:1;grid-row:1/3;font-size:21px;align-self:center}
+  #app[data-screen=finished] .score-table .final-name,  #app[data-screen=intermission] .score-table .final-name{grid-column:2/-1;grid-row:1;font-size:23px;white-space:nowrap;overflow-wrap:normal;line-height:1.15}
+  #app[data-screen=finished] .score-table td[data-label],  #app[data-screen=intermission] .score-table td[data-label]{grid-row:2;flex-direction:column;align-items:flex-start;justify-content:center;font-size:21px;line-height:1.1;gap:3px}
+  #app[data-screen=finished] .score-table td:nth-child(3),  #app[data-screen=intermission] .score-table td:nth-child(3){grid-column:2}
+  #app[data-screen=finished] .score-table td:nth-child(4),  #app[data-screen=intermission] .score-table td:nth-child(4){grid-column:3}
+  #app[data-screen=finished] .score-table td:nth-child(5),  #app[data-screen=intermission] .score-table td:nth-child(5){grid-column:4}
+  #app[data-screen=finished] .score-table td:nth-child(6),  #app[data-screen=intermission] .score-table td:nth-child(6){grid-column:5;font-size:25px;align-items:flex-end}
+  #app[data-screen=finished] .score-table td[data-label]:before,  #app[data-screen=intermission] .score-table td[data-label]:before{content:attr(data-label);font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;opacity:.8}
+  #app[data-screen=finished] .score-table tr.first-place,  #app[data-screen=intermission] .score-table tr.first-place{background:var(--ink);border-color:var(--ink)}
+  #app[data-screen=finished] .score-table .first-place .final-name,  #app[data-screen=intermission] .score-table .first-place .final-name{font-size:26px}
   [data-screen=finished] .results-actions{flex:none;padding-top:4px}
 }
 
@@ -642,3 +642,16 @@ body.learning .topbar{display:none}.learning-screen{flex:1;min-height:0;display:
 @media(min-width:1700px) and (min-height:1000px){.setting-picker-trigger{font-size:38px;min-height:56px}.picker-change{font-size:21px}.picker-panel{max-width:1350px;padding:40px}.picker-top h2{font-size:60px}.picker-choice{padding:32px}.picker-choice strong{font-size:48px}.picker-description{font-size:28px}.picker-symbol{font-size:58px;height:84px;min-width:84px}.picker-hint,.picker-close{font-size:27px}}
 @media(max-height:650px){.picker-panel{padding:22px}.picker-top{margin-bottom:20px}.picker-top h2{font-size:34px}.picker-choice{padding:18px}.picker-choice strong{font-size:28px}.picker-description{font-size:18px}.picker-symbol{height:45px;min-width:45px;font-size:32px;margin-bottom:10px}.picker-selected{margin-top:12px}.picker-hint{margin-top:20px;font-size:17px}}
 @media(max-width:700px){.setting-picker{padding:14px}.picker-choices,.picker-choices.round-choices{grid-template-columns:1fr}.picker-top h2{font-size:27px}.picker-close{font-size:17px;margin-left:12px}.picker-panel{padding:18px}}
+
+/* Round totals grow with the roster instead of stretching one player across the screen. */
+[data-screen=intermission] .results{justify-content:center;gap:0}
+[data-screen=intermission] .results-heading{margin-bottom:22px}
+[data-screen=intermission] .scoreboard{flex:0 1 auto;height:calc(var(--summary-rows,1)*72px + 32px)}
+[data-screen=intermission] .break-countdown{margin-top:20px}
+[data-screen=intermission] .final-name{white-space:nowrap;overflow-wrap:normal}
+@media(min-width:1700px) and (min-height:1000px){[data-screen=intermission] .scoreboard{height:calc(var(--summary-rows,1)*96px + 40px)}}
+@media(max-width:700px){
+ [data-screen=intermission] .results-heading{margin-bottom:18px}
+ [data-screen=intermission] .scoreboard{height:auto;flex:0 1 auto}
+ [data-screen=intermission] .break-countdown{margin-top:18px}
+}
