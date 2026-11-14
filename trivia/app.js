@@ -130,8 +130,9 @@ function updateLobby(){
   var help=document.getElementById('lobby-help');help.hidden=!!me&&!state.canControl;
   help.textContent=state.canControl?'Everyone here? Let’s play!':'Watching live. Answer on your phone.';
 }
+function categoryName(){var category=config.categories.find(function(c){return c.id===state.settings.category;});return category?category.name:state.settings.category==='bible'?'The Bible':'Wait… Really?';}
 function questionMeta(){
-  return '<div class="round-meta"><span class="round-category">THE BIBLE</span><span class="round-number">QUESTION '+state.questionInRound+' OF '+state.settings.questionsPerRound+' · ROUND '+state.matchRound+' / 3</span></div>';
+  return '<div class="round-meta"><span class="round-category">'+esc(categoryName().toUpperCase())+'</span><span class="round-number">QUESTION '+state.questionInRound+' OF '+state.settings.questionsPerRound+' · ROUND '+state.matchRound+' / 3</span></div>';
 }
 function availablePoints(now){
   var rules=state.rules,elapsed=now-state.round.startsAt;
@@ -226,7 +227,8 @@ function buildLearning(){
   var skip=!from||performance.now()+clockOffset>=r.lessonStartsAt;
   if(!skip)fadingQuestionScreen(answer.id);
   document.body.classList.add('learning');setScreen('learning');lessonContentKey='';
-  app.innerHTML='<section class="learning-screen"><div class="learning-answer" id="learning-answer"><span class="learning-letter">'+letter+'.</span> <span class="learning-label">'+esc(answer.label)+'</span></div><div class="lesson-layout"><div class="lesson-reading"><h3 class="lesson-heading">The story behind the answer</h3><p class="learning-fact">'+esc(r.explanation)+'</p><section class="verse-card" aria-label="Bible passage"><h3 id="verse-reference">'+esc(r.reference.label)+' · NLT</h3><p id="verse-text" aria-live="polite" tabindex="0" aria-label="Bible verses">Loading the passage…</p><p class="verse-credit" id="verse-credit"></p></section></div><aside class="lesson-scores"><h3>Points this question</h3><p class="your-gain" id="your-gain"></p><ol class="lesson-score-list" id="lesson-scores"></ol></aside></div><div class="lesson-footer"><p class="helper">Talk it over, then let any player tap Continue on their phone to keep the fun going.</p>'+(state.self?'<button class="btn" id="continue">Continue →</button>':'')+'</div></section>';
+  var isBible=state.settings.category==='bible';
+  app.innerHTML='<section class="learning-screen'+(isBible?'':' general-lesson')+'"><div class="learning-answer" id="learning-answer"><span class="learning-letter">'+letter+'.</span> <span class="learning-label">'+esc(answer.label)+'</span></div><div class="lesson-layout"><div class="lesson-reading"><h3 class="lesson-heading">The story behind the answer</h3><p class="learning-fact">'+esc(r.explanation)+'</p>'+(isBible?'<section class="verse-card" aria-label="Bible passage"><h3 id="verse-reference">'+esc(r.reference.label)+' · NLT</h3><p id="verse-text" aria-live="polite" tabindex="0" aria-label="Bible verses">Loading the passage…</p><p class="verse-credit" id="verse-credit"></p></section>':'<p class="lesson-source">Fact source: <a href="'+esc(r.reference.url)+'" target="_blank" rel="noopener">'+esc(r.reference.label)+'</a></p>')+'</div><aside class="lesson-scores"><h3>Points this question</h3><p class="your-gain" id="your-gain"></p><ol class="lesson-score-list" id="lesson-scores"></ol></aside></div><div class="lesson-footer"><p class="helper">Talk it over, then let any player tap Continue on their phone to keep the fun going.</p>'+(state.self?'<button class="btn" id="continue">Continue →</button>':'')+'</div></section>';
   if(state.self)document.getElementById('continue').onclick=function(){send({type:'continue',roundId:state.round.id});};
   var el=document.getElementById('learning-answer');
   if(skip)document.querySelector('.learning-screen').classList.add('skip-animation');
@@ -243,13 +245,13 @@ function buildLearning(){
   el.style.removeProperty('animation');
 }
 function updateLearning(){
-  if(!document.getElementById('verse-text'))return;
+  if(!document.getElementById('lesson-scores'))return;
   var scripture=state.round.scripture||{status:'loading'},verses=scripture.verses||[];
   var key=JSON.stringify([scripture,state.players]);if(key===lessonContentKey)return;lessonContentKey=key;
   var text=document.getElementById('verse-text');
-  text.textContent=verses.length?verses.map(function(verse){return verse.number+' '+verse.text;}).join(' '):scripture.status==='unavailable'?'The passage could not load right now. You can still discuss the lesson and continue.':'Loading the passage…';
+  if(text){text.textContent=verses.length?verses.map(function(verse){return verse.number+' '+verse.text;}).join(' '):scripture.status==='unavailable'?'The passage could not load right now. You can still discuss the lesson and continue.':'Loading the passage…';
   document.getElementById('verse-reference').textContent=state.round.reference.label+' · NLT';
-  document.getElementById('verse-credit').textContent=scripture.status==='ready'?(scripture.credit||'NLT · Tyndale House Publishers'):'';
+  document.getElementById('verse-credit').textContent=scripture.status==='ready'?(scripture.credit||'NLT · Tyndale House Publishers'):'';}
   var players=state.players.slice().sort(function(a,b){return ((b.result&&b.result.points)||0)-((a.result&&a.result.points)||0)||b.score-a.score;});
   document.getElementById('lesson-scores').parentNode.style.setProperty('--lesson-count',Math.min(9,players.length));
   setMarkup('lesson-scores',players.slice(0,9).map(function(p){return '<li><span class="gain-name">'+playerAvatar(p,true)+esc(p.name)+'</span><strong>+'+((p.result&&p.result.points)||0)+'</strong></li>';}).join(''));
@@ -288,5 +290,5 @@ document.getElementById('fullscreen').onclick=function(){if(document.fullscreenE
 document.addEventListener('keydown',function(e){if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)||e.repeat)return;var i=letters.indexOf(e.key.toUpperCase());if(i>=0&&state&&state.phase==='question'){var b=document.getElementById('option-'+state.round.options[i].id);if(b&&!b.disabled)b.click();}});
 document.addEventListener('visibilitychange',function(){if(!document.hidden&&session&&ws&&ws.readyState===1)send({type:'sync'});});
 setInterval(updateClock,100);
-fetch(apiPath('/api/config'),{credentials:'omit'}).then(function(r){return r.json();}).then(function(c){config=c;}).catch(function(){});
+fetch(apiPath('/api/config'),{credentials:'omit'}).then(function(r){return r.json();}).then(function(c){config=c;if(state&&state.phase==='lobby'){buildLobby();updateLobby();}}).catch(function(){});
 session=readSession();if(session){app.innerHTML='<div class="panel"><h2>Welcome back.</h2><p>Reconnecting to your room…</p><button class="btn secondary" id="reset">Back to home</button></div>';document.getElementById('reset').onclick=function(){leave(true);};connect();}else renderHome();
