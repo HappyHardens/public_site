@@ -5,8 +5,28 @@ var runtime=window.HH_TRIVIA_CONFIG||{}, backendOrigin=runtime.backendOrigin||lo
 var letters=['A','B','C','D'];
 function apiPath(path){return backendOrigin+path;}
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
-function readSession(){try{return JSON.parse(sessionStorage.getItem('hh-trivia')||'null');}catch(e){return null;}}
-function saveSession(){try{if(session)sessionStorage.setItem('hh-trivia',JSON.stringify(session));else sessionStorage.removeItem('hh-trivia');}catch(e){}}
+function storedSession(store,key){try{return JSON.parse(store.getItem(key)||'null');}catch(e){return null;}}
+function readSession(){
+  var code=(new URLSearchParams(location.search).get('room')||'').trim().toUpperCase(),saved;
+  try{saved=storedSession(sessionStorage,'hh-trivia');}catch(e){}
+  if(saved&&saved.code&&(!code||saved.code===code))return saved;
+  try{saved=storedSession(localStorage,code?'hh-trivia-player:'+code:'hh-trivia-player');}catch(e){}
+  if(saved&&saved.role==='player'&&saved.token&&saved.code&&Date.now()-saved.savedAt<4*60*60*1000)return saved;
+  return null;
+}
+function saveSession(){
+  try{if(session)sessionStorage.setItem('hh-trivia',JSON.stringify(session));else sessionStorage.removeItem('hh-trivia');}catch(e){}
+  if(session&&session.role==='player'&&session.token){
+    var saved={code:session.code,role:session.role,token:session.token,savedAt:Date.now()};
+    try{localStorage.setItem('hh-trivia-player',JSON.stringify(saved));localStorage.setItem('hh-trivia-player:'+session.code,JSON.stringify(saved));}catch(e){}
+  }
+}
+function forgetPlayerSession(previous,expired){
+  if(!previous||previous.role!=='player')return;
+  try{var last=storedSession(localStorage,'hh-trivia-player');if(last&&last.token===previous.token)localStorage.removeItem('hh-trivia-player');
+    if(expired)localStorage.removeItem('hh-trivia-player:'+previous.code);
+  }catch(e){}
+}
 function toast(message){var el=document.getElementById('toast');el.textContent=message;el.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(function(){el.classList.remove('visible');},4500);}
 function send(m){if(!ws||ws.readyState!==1){toast('Reconnecting. Wait for the connection before choosing.');return false;}ws.send(JSON.stringify(m));return true;}
 var errors={ROOM_NOT_FOUND:'That room is no longer available. Check the code or start a new room.',ROOM_FULL:'This room already has twenty players.',NAME_TAKEN:'That name is taken. Try a different name.',INVALID_NAME:'Enter a name to join.',LESSON_RUNNING:'Take a moment to read the story. Continue unlocks when the countdown ends.',NOT_REVEALING:'The next question is already on its way.',NOT_READY:'Every player must be connected and ready.',OPTION_REMOVED:'That answer is fading out. Choose another one.',NOT_ANSWERING:'The answer window is closed.',STALE_QUESTION:'A new question has started.',STALE_SUBMISSION:'Your newer answer has already been received.',INVALID_TOKEN:'This reconnect link has expired. Rejoin from the home screen.',MATCH_STARTED:'The match has started. You can still watch.',ROOM_EXPIRED:'This room has expired. Start a new room.',NOT_HOST:'Only the host or room captain can do that.',PLAYER_CONNECTED:'Only a disconnected player can be removed in the lobby.',SERVER_FULL:'The server is full. Please try again shortly.'};
@@ -51,13 +71,13 @@ function openSocket(action){
   ws.onmessage=function(event){if(ws!==socket)return;var m;try{m=JSON.parse(event.data);}catch(e){return;}
     if(m.type==='joined'){clearTimeout(socketTimer);if(healthRequest){healthRequest.abort();healthRequest=null;}connectionNotice('',false);var rejoining=!!session;session={code:m.code,role:m.role,token:m.token};saveSession();if(m.midGame&&!rejoining)toast('You’re in! Join this question if there’s time. Your score starts at zero.');connection.textContent=m.role==='viewer'?'Watching live':'Game on!';}
     if(m.type==='state'){clockOffset=m.serverNow-performance.now();state=m;seq=Math.max(seq,m.self?m.self.lastSeq+1:0);render();}
-    if(m.type==='error'){clearTimeout(socketTimer);connectionNotice('',false);toast(errors[m.code]||'That action is unavailable. Please try again.');if(['INVALID_TOKEN','ROOM_NOT_FOUND','ROOM_EXPIRED'].indexOf(m.code)>=0){leave(false);}else if(!session){manualClose=true;ws.close();connection.textContent='Bring your A-game!';}}
+    if(m.type==='error'){clearTimeout(socketTimer);connectionNotice('',false);toast(errors[m.code]||'That action is unavailable. Please try again.');if(['INVALID_TOKEN','ROOM_NOT_FOUND','ROOM_EXPIRED'].indexOf(m.code)>=0){leave(false,true);}else if(!session){manualClose=true;ws.close();connection.textContent='Bring your A-game!';}}
     if(m.type==='answerAccepted'){connection.textContent='Answer saved';if(state&&state.phase==='question'&&state.self&&state.round.id===m.roundId&&m.seq>=state.self.lastSeq){state.self.lastSeq=m.seq;state.self.selection={optionId:m.optionId,potentialPoints:m.potentialPoints};updateRound();}}
   };
   ws.onclose=function(event){if(ws!==socket||manualClose)return;clearTimeout(socketTimer);connection.textContent='Reconnecting…';if(state)updateRound();if(event.code===4001){manualClose=true;connection.textContent='Open on another device';toast('This player reconnected in another tab. Return home to join separately.');return;}if(session){retryTimer=setTimeout(function(){connect();},Math.min(10000,1000*Math.pow(1.5,retry++)));}else retryStartup(socket,action);};
   ws.onerror=function(){if(ws===socket)connection.textContent='Connecting…';};
 }
-function leave(showHome){connectGeneration++;warming=false;clearTimeout(socketTimer);if(healthRequest){healthRequest.abort();healthRequest=null;}connectionNotice('',false);manualClose=true;clearTimeout(retryTimer);if(ws)ws.close();ws=null;session=null;state=null;viewKey='';priorSelection=null;saveSession();connection.textContent='Bring your A-game!';if(showHome!==false)history.replaceState(null,'',location.pathname);renderHome();}
+function leave(showHome,expired){forgetPlayerSession(session,expired);connectGeneration++;warming=false;clearTimeout(socketTimer);if(healthRequest){healthRequest.abort();healthRequest=null;}connectionNotice('',false);manualClose=true;clearTimeout(retryTimer);if(ws)ws.close();ws=null;session=null;state=null;viewKey='';priorSelection=null;saveSession();connection.textContent='Bring your A-game!';if(showHome!==false)history.replaceState(null,'',location.pathname);renderHome();}
 function homeSettings(){return {category:'bible',questionsPerRound:5};}
 function setScreen(name){app.setAttribute('data-screen',name);}
 function renderHome(){
@@ -225,6 +245,9 @@ function fadingQuestionScreen(answerId){
   document.body.appendChild(layer);
   setTimeout(function(){if(layer.parentNode)layer.parentNode.removeChild(layer);},1100);
 }
+function lessonJoinCard(){
+  return '<div class="lesson-rejoin"><img src="'+esc(apiPath('/api/qr?room='+state.code))+'" alt="Scan to join or rejoin this game"><div><h3>Join / rejoin</h3><strong>'+esc(state.code)+'</strong><a href="'+esc(joinLink())+'" target="_blank" rel="noopener">HappyHardens.com/trivia/join</a><p>Back on your phone? Scan to return.</p></div></div>';
+}
 function buildLearning(){
   var r=state.round,answer=r.options.find(function(o){return o.id===r.answerId;}),letter=letters[r.options.indexOf(answer)];
   var old=document.getElementById('option-'+answer.id),oldLabel=old&&old.children[1];
@@ -234,8 +257,9 @@ function buildLearning(){
   if(!skip)fadingQuestionScreen(answer.id);
   document.body.classList.add('learning');setScreen('learning');lessonContentKey='';
   var isBible=state.settings.category==='bible';
-  app.innerHTML='<section class="learning-screen'+(isBible?'':' general-lesson')+'"><div class="learning-answer" id="learning-answer"><span class="learning-letter">'+letter+'.</span> <span class="learning-label">'+esc(answer.label)+'</span></div><div class="lesson-layout"><div class="lesson-reading"><h3 class="lesson-heading">The story behind the answer</h3><p class="learning-fact">'+esc(r.explanation)+'</p>'+(isBible?'<section class="verse-card" aria-label="Bible passage"><h3 id="verse-reference">'+esc(r.reference.label)+' · NLT</h3><p id="verse-text" aria-live="polite" tabindex="0" aria-label="Bible verses">Loading the passage…</p><p class="verse-credit" id="verse-credit"></p></section>':'<p class="lesson-source">Fact source: <a href="'+esc(r.reference.url)+'" target="_blank" rel="noopener">'+esc(r.reference.label)+'</a></p>')+'</div><aside class="lesson-scores"><h3>Points this question</h3><p class="your-gain" id="your-gain"></p><ol class="lesson-score-list" id="lesson-scores"></ol></aside></div><div class="lesson-footer"><p class="continue-countdown" id="continue-countdown" role="timer"></p><p class="helper">Talk it over, then let any player tap Continue on their phone to keep the fun going.</p>'+(state.self?'<button class="btn" id="continue">Continue →</button>':'')+'</div></section>';
-  if(state.self)document.getElementById('continue').onclick=function(){send({type:'continue',roundId:state.round.id});};
+  app.innerHTML='<section class="learning-screen'+(isBible?'':' general-lesson')+'"><div class="learning-answer" id="learning-answer"><span class="learning-letter">'+letter+'.</span> <span class="learning-label">'+esc(answer.label)+'</span></div><div class="lesson-layout"><div class="lesson-reading"><h3 class="lesson-heading">The story behind the answer</h3><p class="learning-fact">'+esc(r.explanation)+'</p>'+(isBible?'<section class="verse-card" aria-label="Bible passage"><h3 id="verse-reference">'+esc(r.reference.label)+' · NLT</h3><p id="verse-text" aria-live="polite" tabindex="0" aria-label="Bible verses">Loading the passage…</p><p class="verse-credit" id="verse-credit"></p></section>':'<p class="lesson-source">Fact source: <a href="'+esc(r.reference.url)+'" target="_blank" rel="noopener">'+esc(r.reference.label)+'</a></p>')+'</div><div class="lesson-sidebar"><aside class="lesson-scores"><h3>Points this question</h3><p class="your-gain" id="your-gain"></p><ol class="lesson-score-list" id="lesson-scores"></ol></aside>'+(!state.self?lessonJoinCard():'')+'</div></div><div class="lesson-footer"><p class="continue-countdown" id="continue-countdown" role="timer"></p><p class="helper">Talk it over, then tap Continue here or on a player’s phone.</p>'+(state.self||state.role==='host'?'<button class="btn" id="continue">Continue →</button>':'')+(!state.self?'<button class="text-button" id="lesson-home">Back to home</button>':'')+'</div></section>';
+  if(state.self||state.role==='host')document.getElementById('continue').onclick=function(){send({type:'continue',roundId:state.round.id});};
+  var home=document.getElementById('lesson-home');if(home)home.onclick=function(){leave(true);};
   var el=document.getElementById('learning-answer');
   if(skip)document.querySelector('.learning-screen').classList.add('skip-animation');
   el.style.animation='none';
@@ -294,7 +318,14 @@ document.getElementById('cancel-connect').onclick=function(){leave(true);};
 document.getElementById('header-leave').onclick=function(){leave(true);};
 document.getElementById('fullscreen').onclick=function(){if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen();else if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen();};
 document.addEventListener('keydown',function(e){if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)||e.repeat)return;var i=letters.indexOf(e.key.toUpperCase());if(i>=0&&state&&state.phase==='question'){var b=document.getElementById('option-'+state.round.options[i].id);if(b&&!b.disabled)b.click();}});
-document.addEventListener('visibilitychange',function(){if(!document.hidden&&session&&ws&&ws.readyState===1)send({type:'sync'});});
+function recoverConnection(){
+  if(document.hidden||!session||manualClose||ws&&ws.readyState===0)return;
+  // A suspended phone can leave a socket marked OPEN even after its connection died.
+  // Reattach with the saved capability instead of waiting for that stale socket.
+  clearTimeout(socketTimer);clearTimeout(retryTimer);var old=ws;ws=null;if(old)old.close();connect();
+}
+document.addEventListener('visibilitychange',recoverConnection);
+if(window.addEventListener)window.addEventListener('pageshow',function(event){if(event.persisted)recoverConnection();});
 setInterval(updateClock,100);
 fetch(apiPath('/api/config'),{credentials:'omit'}).then(function(r){return r.json();}).then(function(c){config=c;if(state&&state.phase==='lobby'){buildLobby();updateLobby();}}).catch(function(){});
-session=readSession();if(session){app.innerHTML='<div class="panel"><h2>Welcome back.</h2><p>Reconnecting to your room…</p><button class="btn secondary" id="reset">Back to home</button></div>';document.getElementById('reset').onclick=function(){leave(true);};connect();}else renderHome();
+session=readSession();if(session){saveSession();app.innerHTML='<div class="panel"><h2>Welcome back.</h2><p>Reconnecting to your room…</p><button class="btn secondary" id="reset">Back to home</button></div>';document.getElementById('reset').onclick=function(){leave(true);};connect();}else renderHome();

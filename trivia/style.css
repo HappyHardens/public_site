@@ -596,3 +596,23 @@ body.learning .topbar{display:none}.learning-screen{flex:1;min-height:0;display:
   #app.large-room #scores .player-row{padding:0 5px}
   #app.large-room #scores .player-row:not(:last-child){margin-bottom:2px}
 }
+
+/* The TV keeps a way back into the game even when every phone disconnects. */
+.lesson-sidebar{display:flex;flex-direction:column;min-height:0}
+.lesson-rejoin{display:flex;align-items:center;background:#e4efdc;border-radius:16px;padding:12px;margin-top:16px;flex:none;text-align:left}
+.lesson-rejoin img{width:112px;height:112px;flex:none;background:white;border-radius:10px;margin-right:14px}
+.lesson-rejoin>div{min-width:0}
+.lesson-rejoin h3{font:22px/1.15 Lilita,Arial}
+.lesson-rejoin strong{display:block;font:36px/1.1 Lilita,Arial;letter-spacing:2px;margin:5px 0}
+.lesson-rejoin a{display:block;font-size:14px;overflow-wrap:anywhere}
+.lesson-rejoin p{font-size:14px;margin-top:5px}
+@media(min-width:701px){
+ .lesson-sidebar{margin-left:24px}
+ .lesson-sidebar .lesson-scores{margin-left:0;height:auto;flex:0 1 auto;width:100%}
+ .lesson-footer .btn{min-width:170px}
+ .lesson-footer #lesson-home{flex:none}
+}
+@media(min-width:1700px) and (min-height:1000px){.lesson-sidebar{margin-left:32px}.lesson-rejoin img{width:140px;height:140px}.lesson-rejoin strong{font-size:44px}.lesson-rejoin h3{font-size:28px}.lesson-rejoin a,.lesson-rejoin p{font-size:18px}}
+@media(max-height:750px) and (min-width:701px){.lesson-rejoin{padding:9px;margin-top:12px}.lesson-rejoin img{width:96px;height:96px;margin-right:10px}.lesson-rejoin strong{font-size:30px}.lesson-rejoin h3{font-size:20px}.lesson-rejoin p,.lesson-rejoin a{font-size:12px}}
+@media(max-width:700px){.lesson-sidebar{flex:none}.lesson-rejoin{display:none}}
+@media(max-height:500px) and (min-width:701px){.lesson-rejoin{padding:6px;margin-top:8px}.lesson-rejoin img{width:70px;height:70px}.lesson-rejoin h3{font-size:16px}.lesson-rejoin strong{font-size:24px}.lesson-rejoin p{display:none}.lesson-footer .btn{min-width:130px}.lesson-footer #lesson-home{font-size:13px}}
