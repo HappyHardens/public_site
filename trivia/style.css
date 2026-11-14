@@ -619,3 +619,6 @@ body.learning .topbar{display:none}.learning-screen{flex:1;min-height:0;display:
 
 /* Keep Scripture study in a separate tab while the player stays in the game. */
 .scripture-link{color:inherit;text-decoration:underline;text-underline-offset:3px;display:inline-block;padding:4px 0}.scripture-link:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:3px}
+
+/* Clear phone camera cutouts when the answer screen hides the header. */
+@media(max-width:700px){body.learning #app{padding-top:36px;padding-top:max(36px,calc(env(safe-area-inset-top,0px) + 16px))}}
