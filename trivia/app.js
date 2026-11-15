@@ -132,8 +132,8 @@ function openSettingPicker(id){
   if(!state||state.phase!=='lobby'||!state.canControl)return;
   closeSettingPicker();
   var category=id==='category',choices=category?config.categories.map(function(c){return {value:c.id,name:c.name,detail:c.description||'Pick your answers. Discover something new.'};}):[3,5,10].map(function(n){return {value:String(n),name:n+' questions',detail:(n*3)+' total · 3 rounds'};});
-  var picker=document.createElement('div');picker.id='setting-picker';picker.className='setting-picker';picker.setAttribute('data-setting',id);
-  picker.innerHTML='<section class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="picker-title"><div class="picker-top"><div><p class="eyebrow">Make it your game</p><h2 id="picker-title">'+(category?'Pick your category!':'How many per round?')+'</h2></div><button class="text-button picker-close" aria-label="Close picker">Close ×</button></div><div class="picker-choices'+(category?'':' round-choices')+'">'+choices.map(function(c,i){return '<button class="picker-choice" data-value="'+esc(c.value)+'" aria-pressed="'+(String(state.settings[id])===c.value)+'"><span class="picker-symbol" aria-hidden="true">'+(category?(i===0?'✦':'?'):c.value)+'</span><strong>'+esc(c.name)+'</strong><span class="picker-description">'+esc(c.detail)+'</span><span class="picker-selected">Selected</span></button>';}).join('')+'</div><p class="picker-hint">Choose a card to set up your game.</p></section>';
+  var picker=document.createElement('div');picker.id='setting-picker';picker.className='setting-picker'+(category&&choices.length>2?' category-grid-picker':'');picker.setAttribute('data-setting',id);
+  picker.innerHTML='<section class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="picker-title"><div class="picker-top"><div><p class="eyebrow">Make it your game</p><h2 id="picker-title">'+(category?'Pick your category!':'How many per round?')+'</h2></div><button class="text-button picker-close" aria-label="Close picker">Close ×</button></div><div class="picker-choices'+(category?'':' round-choices')+'">'+choices.map(function(c,i){return '<button class="picker-choice" data-value="'+esc(c.value)+'" aria-pressed="'+(String(state.settings[id])===c.value)+'"><span class="picker-symbol" aria-hidden="true">'+(category?(c.value==='bible'?'✦':c.value==='1980s'?'80s':c.value==='1990s'?'90s':'?'):c.value)+'</span><strong>'+esc(c.name)+'</strong><span class="picker-description">'+esc(c.detail)+'</span><span class="picker-selected">Selected</span></button>';}).join('')+'</div><p class="picker-hint">Choose a card to set up your game.</p></section>';
   app.appendChild(picker);document.getElementById('pick-'+id).setAttribute('aria-expanded','true');
   picker.querySelector('.picker-close').onclick=closeSettingPicker;
   picker.onclick=function(e){if(e.target===picker)closeSettingPicker();};
@@ -194,7 +194,7 @@ function updateLobby(){
   var help=document.getElementById('lobby-help');help.hidden=!!me&&!state.canControl;
   help.textContent=state.canControl?'Everyone here? Let’s play!':'Watching live. Answer on your phone.';
 }
-function categoryName(){var category=config.categories.find(function(c){return c.id===state.settings.category;});return category?category.name:state.settings.category==='bible'?'The Bible':'Wait… Really?';}
+function categoryName(){var category=config.categories.find(function(c){return c.id===state.settings.category;});return category?category.name:state.settings.category==='bible'?'The Bible':state.settings.category==='wait-really'?'Wait… Really?':state.settings.category;}
 function questionMeta(){
   return '<div class="round-meta"><span class="round-category">'+esc(categoryName().toUpperCase())+'</span><span class="round-number">QUESTION '+state.questionInRound+' OF '+state.settings.questionsPerRound+' · ROUND '+state.matchRound+' / 3</span></div>';
 }
